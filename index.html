@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#0A0A0A"/>
 <title>NERI · Sistema Operativo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
@@ -15,8 +15,10 @@
   --goldDim:rgba(198,168,107,.10);--goldBorder:rgba(198,168,107,.22);
   --w100:#fff;--w60:rgba(255,255,255,.60);--w35:rgba(255,255,255,.35);
   --w18:rgba(255,255,255,.18);--w08:rgba(255,255,255,.08);--w04:rgba(255,255,255,.04);
+  --red:rgba(255,80,80,.8);--redDim:rgba(255,80,80,.08);--redBorder:rgba(255,80,80,.22);
+  --green:#4caf50;--greenDim:rgba(76,175,80,.08);--greenBorder:rgba(76,175,80,.22);
   --display:'Bebas Neue',sans-serif;--body:'Montserrat',sans-serif;
-  --sidebar:240px;
+  --sidebar:230px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%;background:var(--black);color:var(--w100);font-family:var(--body)}
@@ -25,187 +27,208 @@ button,input,textarea,select{font-family:var(--body)}
 .hidden{display:none!important}
 
 /* LOGIN */
-.login{
-  position:fixed;inset:0;z-index:999;
-  background:radial-gradient(ellipse 50% 60% at 20% -10%,rgba(198,168,107,.12),transparent 55%),#050505;
-  display:flex;align-items:center;justify-content:center;padding:24px;
-}
-.login-card{
-  width:min(420px,100%);
-  border:1px solid var(--goldBorder);
-  background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));
-  padding:38px 34px;border-radius:22px;
-  box-shadow:0 60px 140px rgba(0,0,0,.6);
-  animation:fadeUp .45s cubic-bezier(.22,1,.36,1);
-}
+.login{position:fixed;inset:0;z-index:999;background:radial-gradient(ellipse 50% 60% at 20% -10%,rgba(198,168,107,.12),transparent 55%),#050505;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{width:min(400px,100%);border:1px solid var(--goldBorder);background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.018));padding:36px 32px;border-radius:20px;box-shadow:0 60px 140px rgba(0,0,0,.6);animation:fadeUp .45s cubic-bezier(.22,1,.36,1)}
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-.login-eye{font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:18px}
-.login-title{font-family:var(--display);font-size:58px;letter-spacing:4px;line-height:.88;margin-bottom:6px}
-.login-title em{color:var(--gold)}
-.login-sub{font-size:12px;color:var(--w35);margin-bottom:28px;line-height:1.6}
-.login-input{width:100%;padding:15px 16px;background:rgba(5,5,5,.9);border:1px solid var(--w08);border-radius:12px;color:var(--w100);font-size:13px;outline:none;transition:border-color .2s;margin-bottom:10px}
-.login-input:focus{border-color:var(--goldBorder)}
-.login-input::placeholder{color:var(--w18)}
-.login-btn{width:100%;background:var(--gold);color:#060606;border:none;border-radius:12px;padding:15px;font-size:9px;letter-spacing:4px;text-transform:uppercase;font-weight:800;cursor:pointer;margin-top:6px;transition:background .18s}
-.login-btn:hover{background:var(--gold2)}
-.login-err{font-size:11px;color:#ff8888;min-height:18px;margin-top:10px}
+.l-eye{font-size:8px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:16px}
+.l-title{font-family:var(--display);font-size:54px;letter-spacing:4px;line-height:.88;margin-bottom:6px}
+.l-title em{color:var(--gold)}
+.l-sub{font-size:12px;color:var(--w35);margin-bottom:26px;line-height:1.6}
+.l-inp{width:100%;padding:14px 15px;background:rgba(5,5,5,.9);border:1px solid var(--w08);border-radius:11px;color:var(--w100);font-size:13px;outline:none;transition:border-color .2s;margin-bottom:9px}
+.l-inp:focus{border-color:var(--goldBorder)}
+.l-inp::placeholder{color:var(--w18)}
+.l-btn{width:100%;background:var(--gold);color:#060606;border:none;border-radius:11px;padding:14px;font-size:9px;letter-spacing:4px;text-transform:uppercase;font-weight:800;cursor:pointer;margin-top:4px;transition:background .18s}
+.l-btn:hover{background:var(--gold2)}
+.l-err{font-size:11px;color:#ff8888;min-height:16px;margin-top:8px}
 
 /* APP */
 .app{min-height:100vh;display:grid;grid-template-columns:var(--sidebar) 1fr}
 
 /* SIDEBAR */
-.sidebar{
-  border-right:1px solid var(--w08);background:rgba(7,7,7,.97);
-  height:100vh;position:sticky;top:0;
-  padding:24px 16px;display:flex;flex-direction:column;
-  overflow:hidden;
-}
-.sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:160px;background:radial-gradient(ellipse 100% 100% at 50% 0%,rgba(198,168,107,.07),transparent);pointer-events:none}
-.sb-brand{font-family:var(--display);font-size:30px;letter-spacing:7px;color:var(--gold);position:relative}
-.sb-asesor{margin-top:10px;padding:10px 12px;background:rgba(198,168,107,.05);border:1px solid var(--goldBorder);border-radius:10px}
-.sb-asesor-name{font-size:11px;font-weight:700;color:var(--w100);letter-spacing:.3px}
-.sb-asesor-role{font-size:9px;color:var(--w35);margin-top:2px;letter-spacing:.3px}
-.sb-line{height:1px;background:linear-gradient(90deg,var(--goldBorder),transparent);margin:18px 0;opacity:.6}
+.sidebar{border-right:1px solid var(--w08);background:rgba(7,7,7,.97);height:100vh;position:sticky;top:0;padding:22px 14px;display:flex;flex-direction:column;overflow:hidden}
+.sidebar::before{content:'';position:absolute;top:0;left:0;right:0;height:140px;background:radial-gradient(ellipse 100% 100% at 50% 0%,rgba(198,168,107,.07),transparent);pointer-events:none}
+.sb-brand{font-family:var(--display);font-size:28px;letter-spacing:7px;color:var(--gold);position:relative}
+.sb-badge{display:inline-block;font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:3px 7px;border-radius:4px;font-weight:800;margin-top:4px}
+.sb-badge.admin{background:var(--goldDim);border:1px solid var(--goldBorder);color:var(--gold)}
+.sb-badge.asesor{background:rgba(255,255,255,.04);border:1px solid var(--w08);color:var(--w35)}
+.sb-perfil{margin-top:10px;padding:10px 11px;background:rgba(198,168,107,.05);border:1px solid var(--goldBorder);border-radius:9px}
+.sb-perfil-name{font-size:11px;font-weight:700;color:var(--w100)}
+.sb-perfil-role{font-size:9px;color:var(--w35);margin-top:2px}
+.sb-line{height:1px;background:linear-gradient(90deg,var(--goldBorder),transparent);margin:16px 0;opacity:.6}
+.sb-section{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--w18);font-weight:800;margin:12px 0 6px 4px}
 .sb-nav{display:flex;flex-direction:column;gap:2px}
-.sb-btn{
-  background:transparent;border:1px solid transparent;
-  color:var(--w35);display:flex;align-items:center;gap:10px;
-  padding:10px 11px;border-radius:11px;cursor:pointer;
-  text-align:left;transition:all .18s;width:100%;
-}
+.sb-btn{background:transparent;border:1px solid transparent;color:var(--w35);display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:10px;cursor:pointer;text-align:left;transition:all .18s;width:100%}
 .sb-btn:hover{background:var(--w04);color:var(--w60)}
 .sb-btn.active{background:var(--goldDim);border-color:var(--goldBorder);color:var(--w100)}
-.sb-icon{font-size:16px;min-width:20px;text-align:center;opacity:.7}
+.sb-btn.admin-btn.active{background:rgba(198,168,107,.08);border-color:var(--goldBorder)}
+.sb-icon{font-size:15px;min-width:18px;text-align:center;opacity:.7}
 .sb-btn.active .sb-icon{opacity:1}
-.sb-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;flex:1}
-.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);opacity:0;flex-shrink:0;transition:opacity .18s}
+.sb-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700;flex:1}
+.sb-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);opacity:0;flex-shrink:0;transition:opacity .18s}
 .sb-btn.active .sb-dot{opacity:1}
-.sb-bottom{margin-top:auto;border-top:1px solid var(--w04);padding-top:14px}
+.sb-bottom{margin-top:auto;border-top:1px solid var(--w04);padding-top:12px}
 .sb-out{width:100%;background:transparent;border:1px solid var(--w08);color:var(--w35);padding:9px;border-radius:9px;font-size:8px;letter-spacing:3px;text-transform:uppercase;font-weight:800;cursor:pointer;transition:all .18s}
 .sb-out:hover{border-color:var(--goldBorder);color:var(--gold)}
 
 /* TOPBAR */
-.topbar{height:54px;border-bottom:1px solid var(--w08);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(8,8,8,.9);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20}
+.topbar{height:52px;border-bottom:1px solid var(--w08);display:flex;align-items:center;justify-content:space-between;padding:0 26px;background:rgba(8,8,8,.9);backdrop-filter:blur(14px);position:sticky;top:0;z-index:20}
 .top-label{font-size:8px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:800}
-.top-user{font-size:9px;color:var(--w35);letter-spacing:.5px}
+.top-user{font-size:9px;color:var(--w35)}
 
-/* MOBILE NAV */
-.mob-nav{display:none;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--w08);position:sticky;top:54px;background:var(--black);z-index:19;scrollbar-width:none}
+/* MOB NAV */
+.mob-nav{display:none;gap:5px;overflow-x:auto;padding:9px 14px;border-bottom:1px solid var(--w08);position:sticky;top:52px;background:var(--black);z-index:19;scrollbar-width:none}
 .mob-nav::-webkit-scrollbar{display:none}
 
 /* CONTENT */
 .main{min-width:0;display:flex;flex-direction:column}
-.content{padding:36px 30px 72px}
-.panel{display:none;animation:panelIn .28s cubic-bezier(.22,1,.36,1)}
+.content{padding:32px 28px 72px}
+.panel{display:none;animation:pIn .28s cubic-bezier(.22,1,.36,1)}
 .panel.active{display:block}
-@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-/* PANEL HEADER */
-.ph{margin-bottom:32px}
-.ph-eye{font-size:7px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:10px}
-.ph-title{font-family:var(--display);font-size:clamp(42px,6vw,80px);letter-spacing:3px;line-height:.88;margin-bottom:10px}
+/* PAGE HEADER */
+.ph{margin-bottom:28px}
+.ph-eye{font-size:7px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:8px}
+.ph-title{font-family:var(--display);font-size:clamp(40px,5.5vw,72px);letter-spacing:3px;line-height:.88;margin-bottom:8px}
 .ph-title em{color:var(--gold);font-style:normal}
-.ph-sub{font-size:13px;color:var(--w35);font-weight:300;line-height:1.6;max-width:600px}
+.ph-sub{font-size:12px;color:var(--w35);font-weight:300;line-height:1.65;max-width:580px}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:28px}
-.stat{border:1px solid var(--w08);border-radius:14px;background:rgba(0,0,0,.2);padding:16px;transition:border-color .2s}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:24px}
+.stat{border:1px solid var(--w08);border-radius:13px;background:rgba(0,0,0,.2);padding:14px;transition:border-color .2s}
 .stat:hover{border-color:var(--goldBorder)}
-.stat-n{font-family:var(--display);font-size:38px;color:var(--gold);letter-spacing:2px;line-height:1}
-.stat-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--w35);margin-top:6px;font-weight:600}
+.stat-n{font-family:var(--display);font-size:36px;color:var(--gold);letter-spacing:2px;line-height:1}
+.stat-l{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--w35);margin-top:5px;font-weight:600}
 
 /* GRIDS */
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 
 /* CARDS */
-.card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:18px;padding:20px;transition:border-color .2s}
+.card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:16px;padding:18px;transition:border-color .2s}
 .card:hover{border-color:var(--goldBorder)}
-.card-eye{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:10px}
-.card-title{font-family:var(--display);font-size:24px;letter-spacing:2px;line-height:1;margin-bottom:8px}
+.card-eye{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:8px}
+.card-title{font-family:var(--display);font-size:22px;letter-spacing:2px;line-height:1;margin-bottom:7px}
 .card-body{font-size:12px;line-height:1.75;color:var(--w35);font-weight:300}
-.card-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.card-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 
 /* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--goldBorder);background:var(--goldDim);color:var(--gold);padding:10px 14px;border-radius:9px;font-size:8px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;cursor:pointer;transition:all .18s;white-space:nowrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;border:1px solid var(--goldBorder);background:var(--goldDim);color:var(--gold);padding:9px 13px;border-radius:8px;font-size:8px;letter-spacing:2px;text-transform:uppercase;font-weight:800;cursor:pointer;transition:all .18s;white-space:nowrap}
 .btn:hover{background:rgba(198,168,107,.18)}
 .btn.primary{background:var(--gold);color:#060606;border-color:var(--gold)}
 .btn.primary:hover{background:var(--gold2)}
 .btn.ghost{background:transparent;color:var(--w35);border-color:var(--w08)}
 .btn.ghost:hover{color:var(--w60);border-color:var(--w18)}
+.btn.danger{background:var(--redDim);color:var(--red);border-color:var(--redBorder)}
+.btn.danger:hover{background:rgba(255,80,80,.14)}
+.btn.success{background:var(--greenDim);color:var(--green);border-color:var(--greenBorder)}
 
 /* DIVIDER */
-.divider{height:1px;background:linear-gradient(90deg,var(--w08),transparent);margin:28px 0}
+.divider{height:1px;background:linear-gradient(90deg,var(--w08),transparent);margin:24px 0}
 
-/* CRM FRAME */
-.crm-wrap{border:1px solid var(--w08);border-radius:16px;overflow:hidden;margin-top:16px}
-.crm-frame{width:100%;height:660px;border:none;background:#060606;display:block}
-.crm-config{border:1px solid var(--goldBorder);background:rgba(198,168,107,.03);border-radius:14px;padding:18px;margin-bottom:14px}
-.crm-config-label{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:8px}
-.crm-input{width:100%;background:#050505;border:1px solid var(--w08);color:var(--w60);border-radius:10px;padding:12px;font-size:12px;outline:none;resize:vertical;min-height:60px}
-.crm-input:focus{border-color:var(--goldBorder)}
+/* EMBED FRAME */
+.embed-wrap{border:1px solid var(--w08);border-radius:14px;overflow:hidden;margin-top:14px}
+.embed-frame{width:100%;border:none;background:#060606;display:block}
+.embed-config{border:1px solid var(--goldBorder);background:rgba(198,168,107,.03);border-radius:12px;padding:16px;margin-bottom:12px}
+.embed-label{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:7px}
+.embed-inp{width:100%;background:#050505;border:1px solid var(--w08);color:var(--w60);border-radius:9px;padding:11px;font-size:12px;outline:none;resize:vertical;min-height:56px}
+.embed-inp:focus{border-color:var(--goldBorder)}
+
+/* LINKS */
+.links-grid{display:grid;gap:10px}
+.link-card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;transition:border-color .2s}
+.link-card:hover{border-color:var(--goldBorder)}
+.link-card.inactivo{opacity:.45}
+.link-icon{font-size:22px;flex-shrink:0}
+.link-info{flex:1;min-width:0}
+.link-tipo{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:4px}
+.link-nombre{font-size:13px;font-weight:600;color:var(--w100);margin-bottom:3px}
+.link-url{font-size:10px;color:var(--w35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px}
+.link-actions{display:flex;gap:6px;flex-shrink:0}
+.link-empty{padding:36px;text-align:center;color:var(--w35);border:1px dashed var(--w08);border-radius:14px}
 
 /* MENSAJES */
-.msg-console{display:grid;grid-template-columns:280px 1fr;gap:14px;margin-top:4px}
-.msg-panel{background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid var(--w08);border-radius:16px;padding:16px;position:sticky;top:70px;height:fit-content}
-.msg-label{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin:14px 0 7px}
-.msg-label:first-child{margin-top:0}
-.msg-search{width:100%;background:#050505;border:1px solid var(--goldBorder);border-radius:10px;padding:13px;color:var(--w100);font-size:12px;outline:none}
+.msg-console{display:grid;grid-template-columns:260px 1fr;gap:12px}
+.msg-panel{background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border:1px solid var(--w08);border-radius:14px;padding:14px;position:sticky;top:68px;height:fit-content}
+.msg-lbl{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin:12px 0 6px}
+.msg-lbl:first-child{margin-top:0}
+.msg-search{width:100%;background:#050505;border:1px solid var(--goldBorder);border-radius:9px;padding:12px;color:var(--w100);font-size:12px;outline:none}
 .msg-search::placeholder{color:var(--w18)}
-.msg-select{width:100%;background:#080808;border:1px solid var(--w08);border-radius:10px;padding:10px;color:var(--w60);font-size:11px;margin-bottom:6px;outline:none}
-.msg-stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:12px}
-.msg-stat{border:1px solid var(--w08);border-radius:10px;padding:10px;background:rgba(0,0,0,.2)}
-.msg-stat b{font-family:var(--display);font-size:24px;color:var(--gold);letter-spacing:1px}
+.msg-sel{width:100%;background:#080808;border:1px solid var(--w08);border-radius:9px;padding:9px;color:var(--w60);font-size:11px;margin-bottom:5px;outline:none}
+.msg-stats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.msg-stat{border:1px solid var(--w08);border-radius:9px;padding:9px;background:rgba(0,0,0,.2)}
+.msg-stat b{font-family:var(--display);font-size:22px;color:var(--gold)}
 .msg-stat span{display:block;font-size:8px;color:var(--w35);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px}
-.msg-results{display:flex;flex-direction:column;gap:12px}
-.msg-card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:16px;padding:18px;transition:border-color .2s}
+.msg-results{display:flex;flex-direction:column;gap:11px}
+.msg-card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:14px;padding:16px;transition:border-color .2s}
 .msg-card:hover{border-color:var(--goldBorder)}
-.msg-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--w08);padding-bottom:12px;margin-bottom:14px}
-.msg-situacion{font-family:var(--display);font-size:22px;letter-spacing:1.5px;line-height:1;margin-top:4px}
+.msg-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--w08);padding-bottom:10px;margin-bottom:12px}
+.msg-sit{font-family:var(--display);font-size:20px;letter-spacing:1.5px;line-height:1;margin-top:3px}
 .msg-id{font-size:8px;letter-spacing:1.5px;color:var(--w18);text-transform:uppercase}
-.msg-badges{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
-.badge{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--w08);padding:5px 8px;border-radius:999px;color:var(--w35)}
+.msg-frase{font-size:10px;color:var(--w35);font-style:italic;margin-top:3px}
+.badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.badge{font-size:7px;letter-spacing:1.5px;text-transform:uppercase;border:1px solid var(--w08);padding:4px 7px;border-radius:999px;color:var(--w35)}
 .badge.HOT{color:var(--gold);background:var(--goldDim);border-color:var(--goldBorder)}
 .badge.WARM{color:#dfc386;border-color:rgba(223,195,134,.25)}
-.msg-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.msg-box{border:1px solid var(--w08);border-radius:12px;padding:12px;background:rgba(0,0,0,.2)}
-.msg-box h4{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:7px}
+.msg-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.msg-box{border:1px solid var(--w08);border-radius:11px;padding:11px;background:rgba(0,0,0,.2)}
+.msg-box h4{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
 .msg-box p,.msg-box li{font-size:12px;line-height:1.65;color:var(--w60);font-weight:300}
-.msg-text{font-size:14px!important;color:var(--w100)!important;font-weight:500!important}
-.msg-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}
-.msg-empty{padding:40px;text-align:center;color:var(--w35);border:1px dashed var(--w08);border-radius:16px}
-.msg-empty-icon{font-size:28px;margin-bottom:10px;opacity:.4}
-
-/* ARCHIVOS */
-.files-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.file-card{border:1px solid var(--w08);background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.01));border-radius:18px;padding:20px;display:flex;flex-direction:column;transition:border-color .2s}
-.file-card:hover{border-color:var(--goldBorder)}
-.file-icon{font-size:24px;margin-bottom:12px;opacity:.6}
-.file-eye{font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:7px}
-.file-name{font-family:var(--display);font-size:20px;letter-spacing:1.5px;line-height:1.1;margin-bottom:8px}
-.file-desc{font-size:11px;line-height:1.7;color:var(--w35);font-weight:300;flex:1}
-.file-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:14px}
+.msg-txt{font-size:13px!important;color:var(--w100)!important;font-weight:500!important}
+.msg-acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}
+.msg-intent{font-size:10px;color:var(--w35);font-style:italic;line-height:1.6;padding:7px 9px;background:rgba(0,0,0,.2);border-radius:7px;margin-bottom:9px}
+.msg-empty{padding:36px;text-align:center;color:var(--w35);border:1px dashed var(--w08);border-radius:14px}
 
 /* PROTOCOLO */
-.proto-list{display:grid;gap:8px}
-.proto-item{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--w08);border-radius:14px;padding:16px;background:rgba(0,0,0,.14);transition:border-color .2s}
+.proto-list{display:grid;gap:7px}
+.proto-item{display:flex;gap:13px;align-items:flex-start;border:1px solid var(--w08);border-radius:13px;padding:14px;background:rgba(0,0,0,.14);transition:border-color .2s}
 .proto-item:hover{border-color:var(--goldBorder)}
-.proto-n{font-family:var(--display);font-size:26px;color:var(--gold);line-height:1;opacity:.5;flex-shrink:0;min-width:30px}
-.proto-body h4{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;color:var(--w100);margin-bottom:5px}
+.proto-n{font-family:var(--display);font-size:24px;color:var(--gold);line-height:1;opacity:.5;flex-shrink:0;min-width:28px}
+.proto-body h4{font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:800;color:var(--w100);margin-bottom:4px}
 .proto-body p{font-size:12px;line-height:1.7;color:var(--w35);font-weight:300}
 
+/* ADMIN */
+.admin-table{width:100%;border-collapse:collapse;margin-top:4px}
+.admin-table th{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800;padding:10px 12px;border-bottom:1px solid var(--w08);text-align:left}
+.admin-table td{padding:12px;border-bottom:1px solid var(--w04);font-size:12px;color:var(--w60);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:rgba(255,255,255,.01)}
+.rol-pill{font-size:7px;letter-spacing:2px;text-transform:uppercase;padding:3px 8px;border-radius:999px;font-weight:800}
+.rol-pill.admin{background:var(--goldDim);border:1px solid var(--goldBorder);color:var(--gold)}
+.rol-pill.asesor{background:rgba(255,255,255,.04);border:1px solid var(--w08);color:var(--w35)}
+.status-dot{width:7px;height:7px;border-radius:50%;display:inline-block;margin-right:5px}
+.dot-on{background:var(--green);box-shadow:0 0 6px rgba(76,175,80,.5)}
+.dot-off{background:var(--red);box-shadow:0 0 6px rgba(255,80,80,.3)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px)}
+.modal{width:min(520px,100%);background:#0d0d0d;border:1px solid var(--goldBorder);border-radius:18px;padding:28px;max-height:88vh;overflow-y:auto}
+.modal-title{font-family:var(--display);font-size:28px;letter-spacing:2px;margin-bottom:6px}
+.modal-sub{font-size:12px;color:var(--w35);margin-bottom:22px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:6px;display:block}
+.form-inp{width:100%;background:#080808;border:1px solid var(--w08);color:var(--w100);border-radius:10px;padding:12px 13px;font-size:13px;outline:none;transition:border-color .2s}
+.form-inp:focus{border-color:var(--goldBorder)}
+.form-inp::placeholder{color:var(--w18)}
+.form-sel{width:100%;background:#080808;border:1px solid var(--w08);color:var(--w60);border-radius:10px;padding:12px;font-size:13px;outline:none}
+.form-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:20px}
+.form-note{font-size:10px;color:var(--w18);line-height:1.7;margin-top:10px;padding-top:10px;border-top:1px solid var(--w04)}
+
+/* NOTICE */
+.notice{border:1px solid var(--goldBorder);background:rgba(198,168,107,.03);border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:12px;color:var(--w60);line-height:1.7}
+.notice b{color:var(--gold)}
+
 /* TOAST */
-.toast{position:fixed;right:22px;bottom:22px;background:var(--gold);color:#060606;border-radius:10px;padding:12px 16px;font-size:11px;font-weight:800;letter-spacing:.5px;opacity:0;transform:translateY(10px);transition:.2s cubic-bezier(.22,1,.36,1);z-index:3000;pointer-events:none}
+.toast{position:fixed;right:20px;bottom:20px;background:var(--gold);color:#060606;border-radius:9px;padding:11px 15px;font-size:11px;font-weight:800;opacity:0;transform:translateY(10px);transition:.2s cubic-bezier(.22,1,.36,1);z-index:3000;pointer-events:none}
 .toast.show{opacity:1;transform:translateY(0)}
 
 /* RESPONSIVE */
-@media(max-width:920px){
+@media(max-width:900px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
   .mob-nav{display:flex}
-  .content{padding:22px 16px 60px}
+  .content{padding:20px 14px 60px}
   .stats,.g3,.g2{grid-template-columns:1fr}
-  .files-grid{grid-template-columns:1fr}
   .msg-console{grid-template-columns:1fr}
   .msg-panel{position:relative;top:0}
   .msg-grid{grid-template-columns:1fr}
@@ -217,25 +240,24 @@ button,input,textarea,select{font-family:var(--body)}
 <!-- LOGIN -->
 <div class="login" id="login">
   <div class="login-card">
-    <div class="login-eye">Acceso privado · Método NERI</div>
-    <div class="login-title">SISTEMA<br><em>NERI</em></div>
-    <p class="login-sub">Tu espacio de trabajo. Acceso restringido.</p>
-    <input class="login-input" id="lEmail" type="email" placeholder="Correo" autocomplete="username"/>
-    <input class="login-input" id="lPass" type="password" placeholder="Contraseña" autocomplete="current-password"/>
-    <button class="login-btn" onclick="signIn()">Entrar</button>
-    <div class="login-err" id="lErr"></div>
+    <div class="l-eye">Acceso privado · Método NERI</div>
+    <div class="l-title">SISTEMA<br><em>NERI</em></div>
+    <p class="l-sub">Tu espacio de trabajo. Acceso restringido.</p>
+    <input class="l-inp" id="lEmail" type="email" placeholder="Correo" autocomplete="username"/>
+    <input class="l-inp" id="lPass" type="password" placeholder="Contraseña" autocomplete="current-password"/>
+    <button class="l-btn" onclick="signIn()">Entrar al sistema</button>
+    <div class="l-err" id="lErr"></div>
   </div>
 </div>
 
 <!-- APP -->
 <div class="app hidden" id="app">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="sb-brand">NERI</div>
-    <div class="sb-asesor" style="margin-top:12px">
-      <div class="sb-asesor-name" id="sbNombre">—</div>
-      <div class="sb-asesor-role" id="sbInmo">—</div>
+    <div id="sbBadge"></div>
+    <div class="sb-perfil" style="margin-top:10px">
+      <div class="sb-perfil-name" id="sbNombre">—</div>
+      <div class="sb-perfil-role" id="sbRole">—</div>
     </div>
     <div class="sb-line"></div>
     <nav class="sb-nav" id="sbNav"></nav>
@@ -244,14 +266,12 @@ button,input,textarea,select{font-family:var(--body)}
     </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <div class="top-label" id="topLabel">Inicio</div>
       <div class="top-user" id="topUser">—</div>
     </div>
     <nav class="mob-nav" id="mobNav"></nav>
-
     <div class="content">
 
       <!-- INICIO -->
@@ -263,8 +283,8 @@ button,input,textarea,select{font-family:var(--body)}
         </div>
         <div class="stats">
           <div class="stat"><div class="stat-n">36</div><div class="stat-l">Mensajes calibrados</div></div>
-          <div class="stat"><div class="stat-n">06</div><div class="stat-l">Archivos listos</div></div>
-          <div class="stat"><div class="stat-n">03</div><div class="stat-l">Documentos activos</div></div>
+          <div class="stat"><div class="stat-n" id="statLinks">—</div><div class="stat-l">Links activos</div></div>
+          <div class="stat"><div class="stat-n">03</div><div class="stat-l">Documentos listos</div></div>
           <div class="stat"><div class="stat-n" id="horaTop">—</div><div class="stat-l">Hora actual</div></div>
         </div>
         <div class="divider"></div>
@@ -272,20 +292,20 @@ button,input,textarea,select{font-family:var(--body)}
           <div class="card" style="cursor:pointer" onclick="showPanel('p-crm')">
             <div class="card-eye">Prioridad</div>
             <div class="card-title">MIS LEADS</div>
-            <p class="card-body">Revisa tus operaciones activas, leads nuevos y seguimientos pendientes.</p>
+            <p class="card-body">Revisa tus operaciones activas y leads nuevos.</p>
             <div class="card-actions"><span class="btn">Abrir CRM →</span></div>
           </div>
           <div class="card" style="cursor:pointer" onclick="showPanel('p-mensajes')">
             <div class="card-eye">Atención</div>
             <div class="card-title">RESPONDER</div>
-            <p class="card-body">Busca la situación exacta y dispara el mensaje correcto en segundos.</p>
+            <p class="card-body">Busca la situación. Dispara el mensaje exacto.</p>
             <div class="card-actions"><span class="btn">Abrir mensajes →</span></div>
           </div>
-          <div class="card" style="cursor:pointer" onclick="showPanel('p-archivos')">
-            <div class="card-eye">Herramientas</div>
-            <div class="card-title">MIS ARCHIVOS</div>
-            <p class="card-body">Plantillas listas para usar. Descarga lo que necesitas para esta operación.</p>
-            <div class="card-actions"><span class="btn">Abrir archivos →</span></div>
+          <div class="card" style="cursor:pointer" onclick="showPanel('p-links')">
+            <div class="card-eye">Compartir</div>
+            <div class="card-title">MIS LINKS</div>
+            <p class="card-body">Tus landings y portales listos para enviar.</p>
+            <div class="card-actions"><span class="btn">Ver links →</span></div>
           </div>
         </div>
       </section>
@@ -295,17 +315,17 @@ button,input,textarea,select{font-family:var(--body)}
         <div class="ph">
           <div class="ph-eye">Operaciones · Leads · Seguimiento</div>
           <h1 class="ph-title">MIS<br><em>LEADS</em></h1>
-          <p class="ph-sub">Todos tus expedientes activos en tiempo real.</p>
+          <p class="ph-sub">Todas tus operaciones activas en tiempo real.</p>
         </div>
-        <div class="crm-config" id="crmConfig">
-          <div class="crm-config-label">URL embed de Airtable</div>
-          <textarea class="crm-input" id="airtableUrl" placeholder="https://airtable.com/embed/..."></textarea>
-          <div class="card-actions" style="margin-top:10px">
+        <div class="embed-config" id="crmConfig">
+          <div class="embed-label">URL embed de Airtable</div>
+          <textarea class="embed-inp" id="airtableUrl" placeholder="https://airtable.com/embed/..."></textarea>
+          <div style="display:flex;gap:7px;margin-top:9px">
             <button class="btn primary" onclick="saveCRM()">Guardar</button>
             <button class="btn ghost" onclick="clearCRM()">Limpiar</button>
           </div>
         </div>
-        <div class="crm-wrap"><iframe class="crm-frame" id="crmFrame" title="CRM"></iframe></div>
+        <div class="embed-wrap"><iframe class="embed-frame" id="crmFrame" style="height:660px" title="CRM"></iframe></div>
       </section>
 
       <!-- MENSAJES -->
@@ -317,24 +337,24 @@ button,input,textarea,select{font-family:var(--body)}
         </div>
         <div class="msg-console">
           <aside class="msg-panel">
-            <div class="msg-label">Buscar</div>
+            <div class="msg-lbl">Buscar</div>
             <input class="msg-search" id="msgQ" placeholder="precio, crédito, no responde..." oninput="filterMsg()"/>
-            <div class="msg-label">Tipo de cliente</div>
-            <select class="msg-select" id="msgCat" onchange="filterMsg()">
+            <div class="msg-lbl">Cliente</div>
+            <select class="msg-sel" id="msgCat" onchange="filterMsg()">
               <option value="">Todos</option>
               <option value="comprador">Comprador</option>
               <option value="vendedor">Vendedor</option>
               <option value="credito">Crédito</option>
             </select>
-            <div class="msg-label">Temperatura</div>
-            <select class="msg-select" id="msgTemp" onchange="filterMsg()">
+            <div class="msg-lbl">Temperatura</div>
+            <select class="msg-sel" id="msgTemp" onchange="filterMsg()">
               <option value="">Todas</option>
               <option value="HOT">HOT</option>
               <option value="WARM">WARM</option>
               <option value="COLD">COLD</option>
             </select>
-            <div class="msg-label">Etapa</div>
-            <select class="msg-select" id="msgEtapa" onchange="filterMsg()">
+            <div class="msg-lbl">Etapa</div>
+            <select class="msg-sel" id="msgEtapa" onchange="filterMsg()">
               <option value="">Todas</option>
               <option value="primer_contacto">Primer contacto</option>
               <option value="objecion">Objeción</option>
@@ -352,26 +372,28 @@ button,input,textarea,select{font-family:var(--body)}
         </div>
       </section>
 
-      <!-- DOCUMENTOS (Panel de Citas embebido) -->
+      <!-- DOCUMENTOS -->
       <section class="panel" id="p-docs">
         <div class="ph">
           <div class="ph-eye">Citas · Reportes · Notaría</div>
           <h1 class="ph-title">MIS<br><em>DOCUMENTOS</em></h1>
-          <p class="ph-sub">Genera confirmaciones de producción, reportes quincenales y citas de notaría.</p>
+          <p class="ph-sub">Genera confirmaciones, reportes quincenales y citas de notaría.</p>
         </div>
-        <div style="border:1px solid var(--w08);border-radius:16px;overflow:hidden">
-          <iframe id="docsFrame" src="" style="width:100%;height:760px;border:none;background:#0a0a0a;display:block" title="Panel de Documentos"></iframe>
+        <div class="embed-wrap">
+          <iframe id="docsFrame" class="embed-frame" style="height:760px" title="Panel de Documentos"></iframe>
         </div>
       </section>
 
-      <!-- ARCHIVOS -->
-      <section class="panel" id="p-archivos">
+      <!-- LINKS -->
+      <section class="panel" id="p-links">
         <div class="ph">
-          <div class="ph-eye">Plantillas privadas · Supabase Storage</div>
-          <h1 class="ph-title">MIS<br><em>ARCHIVOS</em></h1>
-          <p class="ph-sub">Todo lo que tú ya tienes preparado. Un clic para abrir o descargar.</p>
+          <div class="ph-eye">Tus landings · Compradores · Progreso</div>
+          <h1 class="ph-title">MIS<br><em>LINKS</em></h1>
+          <p class="ph-sub">Todo listo para compartir. Sin descargar nada.</p>
         </div>
-        <div class="files-grid" id="filesGrid"></div>
+        <div class="links-grid" id="linksGrid">
+          <div class="link-empty">Cargando tus links...</div>
+        </div>
       </section>
 
       <!-- PROTOCOLO -->
@@ -382,51 +404,102 @@ button,input,textarea,select{font-family:var(--body)}
           <p class="ph-sub">Lo que haces antes de publicar, enviar o activar cualquier herramienta.</p>
         </div>
         <div class="proto-list">
-          <div class="proto-item">
-            <div class="proto-n">01</div>
-            <div class="proto-body">
-              <h4>Revisa tus leads al entrar</h4>
-              <p>Lo primero cada día es el CRM. Leads nuevos se atienden en menos de 2 horas. HOT en menos de 30 minutos.</p>
-            </div>
-          </div>
-          <div class="proto-item">
-            <div class="proto-n">02</div>
-            <div class="proto-body">
-              <h4>Usa los mensajes calibrados</h4>
-              <p>No improvises respuestas. Busca la situación exacta, copia el mensaje y personaliza solo las variables en corchetes.</p>
-            </div>
-          </div>
-          <div class="proto-item">
-            <div class="proto-n">03</div>
-            <div class="proto-body">
-              <h4>Descarga desde tus archivos</h4>
-              <p>Las plantillas ya están programadas con tu información. Descarga lo que necesitas para esta operación desde la sección Mis Archivos.</p>
-            </div>
-          </div>
-          <div class="proto-item">
-            <div class="proto-n">04</div>
-            <div class="proto-body">
-              <h4>Prueba antes de publicar</h4>
-              <p>Antes de enviar cualquier landing a un cliente, llena el formulario tú mismo y confirma que el lead llega a Airtable.</p>
-            </div>
-          </div>
-          <div class="proto-item">
-            <div class="proto-n">05</div>
-            <div class="proto-body">
-              <h4>Todo queda en el CRM</h4>
-              <p>Cada lead, cada cita, cada estado. Si no está en Airtable, no existe. El seguimiento depende del registro.</p>
-            </div>
-          </div>
-          <div class="proto-item">
-            <div class="proto-n">06</div>
-            <div class="proto-body">
-              <h4>Orden de Producción para propiedad nueva</h4>
-              <p>Cuando llegue una propiedad nueva, envía la Orden de Producción a Enrique con los datos completos. Las plantillas estarán listas en tu sistema.</p>
-            </div>
-          </div>
+          <div class="proto-item"><div class="proto-n">01</div><div class="proto-body"><h4>Revisa tus leads al entrar</h4><p>Lo primero cada día es el CRM. Leads HOT se atienden en menos de 30 minutos. WARM el mismo día.</p></div></div>
+          <div class="proto-item"><div class="proto-n">02</div><div class="proto-body"><h4>Usa los mensajes calibrados</h4><p>No improvises. Busca la situación exacta, copia el mensaje y personaliza solo las variables en corchetes.</p></div></div>
+          <div class="proto-item"><div class="proto-n">03</div><div class="proto-body"><h4>Comparte desde Mis Links</h4><p>Los links de tus landings y portales están listos. Copia y envía directamente desde ahí.</p></div></div>
+          <div class="proto-item"><div class="proto-n">04</div><div class="proto-body"><h4>Prueba antes de publicar</h4><p>Antes de enviar cualquier landing a Meta, llena el formulario tú mismo y confirma que el lead llega al CRM.</p></div></div>
+          <div class="proto-item"><div class="proto-n">05</div><div class="proto-body"><h4>Todo queda en el CRM</h4><p>Cada lead, cada cita, cada estado. Si no está en Airtable, no existe.</p></div></div>
+          <div class="proto-item"><div class="proto-n">06</div><div class="proto-body"><h4>Propiedad nueva → Orden de Producción</h4><p>Envía la OP a Enrique con los datos completos. Tus links aparecerán en el sistema listos para usar.</p></div></div>
         </div>
       </section>
 
+      <!-- ADMIN: ASESORES -->
+      <section class="panel" id="p-admin-asesores">
+        <div class="ph">
+          <div class="ph-eye">Administración · Panel de control</div>
+          <h1 class="ph-title">ASES<em>ORES</em></h1>
+          <p class="ph-sub">Gestiona accesos, perfiles y configuración de cada asesor.</p>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn primary" onclick="abrirModalNuevoAsesor()">+ Nuevo asesor</button>
+        </div>
+        <div style="border:1px solid var(--w08);border-radius:14px;overflow:hidden">
+          <table class="admin-table" id="tablaAsesores">
+            <thead><tr><th>Nombre</th><th>Inmobiliaria</th><th>Teléfono</th><th>Rol</th><th>Acciones</th></tr></thead>
+            <tbody id="tbodyAsesores"><tr><td colspan="5" style="text-align:center;color:var(--w35);padding:24px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ADMIN: LINKS -->
+      <section class="panel" id="p-admin-links">
+        <div class="ph">
+          <div class="ph-eye">Administración · Links</div>
+          <h1 class="ph-title">GESTIÓN<br><em>LINKS</em></h1>
+          <p class="ph-sub">Asigna landings y portales de progreso a cada asesor.</p>
+        </div>
+        <div class="notice"><b>¿Cómo funciona?</b> Selecciona un asesor, agrega el link con su nombre y tipo. El asesor lo verá de inmediato en su sección Mis Links.</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:14px">
+          <button class="btn primary" onclick="abrirModalNuevoLink()">+ Agregar link</button>
+        </div>
+        <div style="margin-bottom:14px">
+          <select class="form-sel" id="filtroAsesorLinks" onchange="cargarLinksAdmin()" style="max-width:280px">
+            <option value="">Todos los asesores</option>
+          </select>
+        </div>
+        <div style="border:1px solid var(--w08);border-radius:14px;overflow:hidden">
+          <table class="admin-table" id="tablaLinks">
+            <thead><tr><th>Asesor</th><th>Tipo</th><th>Nombre</th><th>URL</th><th>Estado</th><th>Acciones</th></tr></thead>
+            <tbody id="tbodyLinks"><tr><td colspan="6" style="text-align:center;color:var(--w35);padding:24px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal-overlay hidden" id="modalNuevoAsesor">
+  <div class="modal">
+    <div class="modal-title">NUEVO ASESOR</div>
+    <p class="modal-sub">Crea el usuario en Supabase Authentication primero, luego registra su perfil aquí.</p>
+    <div class="form-group"><label class="form-label">UUID del usuario (de Supabase Auth)</label><input class="form-inp" id="na-id" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"/></div>
+    <div class="form-group"><label class="form-label">Nombre completo</label><input class="form-inp" id="na-nombre" placeholder="Ana García López"/></div>
+    <div class="form-group"><label class="form-label">Teléfono</label><input class="form-inp" id="na-tel" placeholder="777 123 4567"/></div>
+    <div class="form-group"><label class="form-label">WhatsApp (con lada, sin +)</label><input class="form-inp" id="na-wa" placeholder="527771234567"/></div>
+    <div class="form-group"><label class="form-label">Inmobiliaria</label><input class="form-inp" id="na-inmo" placeholder="Century 21 Haus"/></div>
+    <div class="form-group"><label class="form-label">Rol</label>
+      <select class="form-sel" id="na-rol"><option value="asesor">Asesor</option><option value="admin">Admin</option></select>
+    </div>
+    <p class="form-note">Para crear el usuario: Supabase → Authentication → Users → Add user → pega el UUID generado aquí.</p>
+    <div class="form-actions">
+      <button class="btn ghost" onclick="cerrarModal('modalNuevoAsesor')">Cancelar</button>
+      <button class="btn primary" onclick="crearAsesor()">Crear asesor</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="modalNuevoLink">
+  <div class="modal">
+    <div class="modal-title">NUEVO LINK</div>
+    <p class="modal-sub">Agrega un link de landing o portal de progreso a un asesor.</p>
+    <div class="form-group"><label class="form-label">Asesor</label>
+      <select class="form-sel" id="nl-asesor"><option value="">Seleccionar asesor...</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Tipo</label>
+      <select class="form-sel" id="nl-tipo">
+        <option value="vendedor">Landing Vendedores</option>
+        <option value="comprador">Landing Compradores</option>
+        <option value="progreso">Portal de Progreso</option>
+        <option value="credito">Opciones de Compra</option>
+      </select>
+    </div>
+    <div class="form-group"><label class="form-label">Nombre descriptivo</label><input class="form-inp" id="nl-nombre" placeholder="Casa Lomas de Cortés · Compradores"/></div>
+    <div class="form-group"><label class="form-label">URL</label><input class="form-inp" id="nl-url" placeholder="https://...vercel.app"/></div>
+    <div class="form-actions">
+      <button class="btn ghost" onclick="cerrarModal('modalNuevoLink')">Cancelar</button>
+      <button class="btn primary" onclick="crearLink()">Agregar link</button>
     </div>
   </div>
 </div>
@@ -435,43 +508,42 @@ button,input,textarea,select{font-family:var(--body)}
 
 <script>
 /* ══ CONFIG ══ */
-const CONFIG = {
-  SUPABASE_URL: "https://rehabzklftvgtunuhrzd.supabase.co",
-  SUPABASE_ANON_KEY: "sb_publishable_OBhu5cgFCjrkWqH0xUGTZg_9LhopkRl",
-  BUCKET: "plantillas-neri",
-  URL_TTL: 300,
-  files: [
-    { eye:"Captación", name:"Landing Vendedores", desc:"Portal del propietario. Diagnóstico fiscal incluido.", icon:"🏠", path:"Plantilla_Landing_Vendedores_Personalizable.html" },
-    { eye:"Compradores", name:"Landing Compradores", desc:"Experiencia con score crediticio y diagnóstico de viabilidad.", icon:"🔑", path:"Plantilla_Landing_Compradores_con_Credito_CORREGIDA.html" },
-    { eye:"Crédito", name:"Opciones de Compra", desc:"Evaluación de escenarios de financiamiento para el comprador.", icon:"📊", path:"Plantilla_opciones-compra_Personalizable.html" },
-    { eye:"Seguimiento", name:"Portal de Progreso", desc:"El cliente ve el avance de su operación en tiempo real.", icon:"📍", path:"Plantilla_Progreso.html" },
-    { eye:"Documentos", name:"Panel de Citas", desc:"Genera confirmaciones de producción, reportes y citas notariales.", icon:"📋", path:"Panel_Citas.html" },
-    { eye:"Mensajes", name:"Librería de Respuestas", desc:"36 escenarios calibrados para cada etapa del proceso.", icon:"💬", path:"sala_reaccion_Mensajes.html" },
-  ]
-};
+const SB_URL  = "https://rehabzklftvgtunuhrzd.supabase.co";
+const SB_KEY  = "sb_publishable_OBhu5cgFCjrkWqH0xUGTZg_9LhopkRl";
+const BUCKET  = "plantillas-neri";
+const URL_TTL = 300;
+
+const TIPO_ICONS = { vendedor:'🏠', comprador:'🔑', progreso:'📍', credito:'📊' };
+const TIPO_LABEL = { vendedor:'Landing Vendedores', comprador:'Landing Compradores', progreso:'Portal de Progreso', credito:'Opciones de Compra' };
+
+let sb, user, perfil = {}, esAdmin = false, todosAsesores = [];
 
 /* ══ PANELS ══ */
-const PANELS = [
-  { id:"p-inicio",    label:"Inicio",      icon:"⚡" },
-  { id:"p-crm",       label:"Mis Leads",   icon:"📌" },
-  { id:"p-mensajes",  label:"Mensajes",    icon:"💬" },
-  { id:"p-docs",      label:"Documentos",  icon:"📋" },
-  { id:"p-archivos",  label:"Archivos",    icon:"📁" },
-  { id:"p-protocolo", label:"Protocolo",   icon:"✦" },
+const PANELS_ASESOR = [
+  { id:'p-inicio',    label:'Inicio',       icon:'⚡' },
+  { id:'p-crm',       label:'Mis Leads',    icon:'📌' },
+  { id:'p-mensajes',  label:'Mensajes',     icon:'💬' },
+  { id:'p-docs',      label:'Documentos',   icon:'📋' },
+  { id:'p-links',     label:'Mis Links',    icon:'🔗' },
+  { id:'p-protocolo', label:'Protocolo',    icon:'✦'  },
+];
+const PANELS_ADMIN = [
+  { id:'p-inicio',          label:'Inicio',     icon:'⚡' },
+  { id:'p-crm',             label:'Leads',      icon:'📌' },
+  { id:'p-mensajes',        label:'Mensajes',   icon:'💬' },
+  { id:'p-docs',            label:'Documentos', icon:'📋' },
+  { id:'p-links',           label:'Mis Links',  icon:'🔗' },
+  { id:'p-admin-asesores',  label:'Asesores',   icon:'👥', adminOnly:true },
+  { id:'p-admin-links',     label:'Links',      icon:'⚙️', adminOnly:true },
 ];
 
-/* ══ MENSAJES DATA ══ */
-const MSGS = [{"id":"comprador_precio_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Pregunta precio antes de dar contexto","frase_cliente":"¿Cuánto cuesta?","intencion_oculta":"Quiere filtrar rápido, comparar o controlar la conversación sin revelar intención real.","respuesta_whatsapp":"El precio es $[PRECIO]. Lo importante es revisar si por zona, distribución, estado y forma de pago tiene sentido para ti. Si esos puntos están alineados, entonces sí vale la pena avanzar a una visita de validación.","respuesta_campo":"Claro, el precio es $[PRECIO]. Pero más que verlo solo como número, conviene revisar si esta casa empata con tu forma de compra: zona, distribución, estado y forma de pago.","variables":["NOMBRE","PRECIO","ZONA","PROPIEDAD"],"no_decir":["Está en oferta","Aprovecha","Es negociable","¿Cuándo la quiere ver?"],"siguiente_paso":"Validar forma de pago y zona antes de proponer visita.","tags":["precio","cuanto cuesta","valor","costo"]},{"id":"comprador_ubicacion_001","categoria":"comprador","temperatura":"COLD","etapa":"objecion","situacion":"Pide ubicación exacta sin validar interés","frase_cliente":"¿Dónde está exactamente?","intencion_oculta":"Puede querer pasar por fuera, comparar o saltarse el proceso de seguridad.","respuesta_whatsapp":"La propiedad está en [ZONA]. Por seguridad del propietario, la ubicación exacta se comparte cuando la visita queda confirmada. Si la zona sí te funciona, revisamos disponibilidad.","respuesta_campo":"Está en [ZONA]. La ubicación exacta la cuidamos hasta confirmar visita, por seguridad de la propiedad y del propietario.","variables":["ZONA","PROPIEDAD"],"no_decir":["Te mando la ubicación","Pásale cuando quieras","Ahí está el pin"],"siguiente_paso":"Confirmar si la zona le funciona antes de abrir visita.","tags":["ubicacion","direccion","pin","referencia","donde"]},{"id":"comprador_credito_001","categoria":"credito","temperatura":"WARM","etapa":"primer_contacto","situacion":"Pregunta si aceptan crédito","frase_cliente":"¿Aceptan crédito?","intencion_oculta":"Hay intención real, pero falta validar viabilidad financiera y tiempos.","respuesta_whatsapp":"Sí, puede revisarse con crédito. Lo importante es validar desde el inicio si tu crédito está listo para esta operación o si habría que ajustar algo antes de avanzar. Eso evita visitas que después no se pueden concretar.","respuesta_campo":"Sí acepta crédito. Antes de verla, conviene revisar si tu crédito realmente empata con el valor y tiempos de esta propiedad.","variables":["NOMBRE","PROPIEDAD","PRECIO"],"no_decir":["Sí, sin problema","Aceptamos todos","Solo mándame tu crédito"],"siguiente_paso":"Pedir tipo de crédito, monto aproximado aprobado y enganche disponible.","tags":["credito","infonavit","fovissste","banco","financiamiento"]},{"id":"comprador_solo_viendo_001","categoria":"comprador","temperatura":"COLD","etapa":"objecion","situacion":"Dice que solo está viendo opciones","frase_cliente":"Solo estoy viendo","intencion_oculta":"No quiere presión, está explorando o aún no tiene claridad de compra.","respuesta_whatsapp":"No pasa nada. De hecho, ver opciones sin estructura suele cansar más que ayudar. Si me dices qué estás tratando de resolver con tu próxima casa, puedo decirte si esta propiedad merece tu atención o no.","respuesta_campo":"Está bien. Solo te diría algo: ver por ver muchas veces confunde. Si entiendo qué estás buscando resolver, te digo si esta opción vale la pena para ti.","variables":["PROPIEDAD","ZONA"],"no_decir":["Avísame si te interesa","Sin compromiso","Entonces luego me dices"],"siguiente_paso":"Hacer una pregunta de diagnóstico: zona, presupuesto o motivo de cambio.","tags":["solo estoy viendo","viendo opciones","informacion","curioso"]},{"id":"comprador_visita_001","categoria":"comprador","temperatura":"HOT","etapa":"cita","situacion":"Quiere visitar la propiedad","frase_cliente":"¿Cuándo puedo verla?","intencion_oculta":"Tiene interés activo; hay que ordenar visita sin perder autoridad.","respuesta_whatsapp":"Por tu perfil, sí vale la pena hacer una visita. No como recorrido casual, sino como validación final para saber si esta propiedad realmente encaja contigo. Tengo espacio [HORARIO_1] o [HORARIO_2]. ¿Cuál te funciona mejor?","respuesta_campo":"Sí tiene sentido verla. La visita nos sirve para validar distribución, entorno, sensación real y forma de pago. Te puedo abrir [HORARIO_1] o [HORARIO_2].","variables":["NOMBRE","PROPIEDAD","HORARIO_1","HORARIO_2"],"no_decir":["Cuando quieras","Te la muestro hoy mismo","Pásame tus datos"],"siguiente_paso":"Confirmar horario, nombre completo y forma de pago.","tags":["visita","cita","verla","recorrido","agenda"]},{"id":"comprador_negociable_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Pregunta si el precio es negociable","frase_cliente":"¿Es negociable?","intencion_oculta":"Quiere medir margen sin demostrar interés ni capacidad.","respuesta_whatsapp":"Cualquier ajuste serio se revisa después de validar interés real, forma de pago y condiciones. Antes de hablar de negociación, conviene saber si la propiedad realmente encaja contigo.","respuesta_campo":"Se puede revisar una propuesta seria, pero primero necesitamos saber si la propiedad sí te funciona y bajo qué forma de pago avanzarías.","variables":["PRECIO","PROPIEDAD"],"no_decir":["Sí, algo se baja","Todo se negocia","Haz una oferta"],"siguiente_paso":"Llevar a visita o validación de forma de pago antes de negociación.","tags":["negociable","ultimo precio","rebaja","oferta"]},{"id":"comprador_caro_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Dice que está caro","frase_cliente":"Está caro","intencion_oculta":"Está comparando por precio, no por valor completo.","respuesta_whatsapp":"Entiendo. Solo cuidaría no comparar únicamente por precio. En una propiedad también pesan zona, estado, distribución, seguridad jurídica y forma de pago. Si quieres, revisamos contra qué la estás comparando y te digo si tiene sentido o no.","respuesta_campo":"Puede sentirse alto si lo ves solo como número. La comparación correcta es con zona, estado, distribución y condiciones reales de operación.","variables":["ZONA","PRECIO","PROPIEDAD"],"no_decir":["Se puede negociar","Está barata para la zona","Es lo que vale"],"siguiente_paso":"Pedir referencia de comparación y recuperar valor.","tags":["caro","precio alto","comparando","barato"]},{"id":"comprador_pensar_001","categoria":"comprador","temperatura":"WARM","etapa":"seguimiento","situacion":"Dice que lo va a pensar","frase_cliente":"Lo voy a pensar","intencion_oculta":"Tiene duda no nombrada: precio, forma de pago, zona, familia o miedo a decidir.","respuesta_whatsapp":"Claro. Solo para que lo pienses con información correcta: ¿lo que necesitas revisar es precio, forma de pago, zona o sensación de la propiedad? Son dudas distintas y cada una se resuelve diferente.","respuesta_campo":"Claro, piénsalo. Pero dime algo: ¿qué parte necesitas ordenar mejor, precio, crédito, zona o sensación de la casa? No todas las dudas se resuelven igual.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Avísame","Quedo pendiente","No tardes porque se va"],"siguiente_paso":"Identificar la duda real y enviar respuesta específica.","tags":["pensar","lo reviso","despues","duda"]},{"id":"comprador_postvisita_hot_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Después de visita con interés alto","frase_cliente":"Me gustó mucho","intencion_oculta":"Hay emoción; se debe pasar a condiciones sin presionar.","respuesta_whatsapp":"Me da gusto que te haya hecho sentido. El siguiente paso no es apartar por presión; es revisar condiciones: forma de pago, tiempos, documentos y viabilidad. Si eso está claro, entonces sí podemos avanzar con seguridad.","respuesta_campo":"Si te hizo sentido en persona, ahora lo correcto es revisar condiciones. Así no decides por emoción, sino con claridad.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Entonces aparta","Se te puede ir","Dame anticipo"],"siguiente_paso":"Revisar condiciones y ruta de apartado.","tags":["post visita","me gusto","interes","apartado","cierre"]},{"id":"vendedor_comision_001","categoria":"vendedor","temperatura":"WARM","etapa":"propietario_diagnostico","situacion":"Propietario pregunta comisión antes de entender proceso","frase_cliente":"¿Cuánto cobras de comisión?","intencion_oculta":"Quiere comparar asesores como costo, no como proceso de protección patrimonial.","respuesta_whatsapp":"Entiendo la pregunta. La comisión no debería verse aislada, sino contra el tipo de proceso que protege tu operación. Lo importante es qué se hace antes, durante y después de publicar para evitar errores, desgaste o negociación débil.","respuesta_campo":"Te entiendo. Solo cuidaría no ver la comisión separada del proceso. Una venta mal preparada puede costar más que una comisión bien justificada.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Cobro X%","Soy más barato","Te puedo bajar la comisión"],"siguiente_paso":"Proponer diagnóstico antes de hablar solo de porcentaje.","tags":["comision","porcentaje","cuanto cobras","honorarios"]},{"id":"vendedor_rapido_001","categoria":"vendedor","temperatura":"HOT","etapa":"propietario_diagnostico","situacion":"Propietario quiere vender rápido","frase_cliente":"Necesito vender rápido","intencion_oculta":"Tiene presión emocional o económica; puede aceptar mala estrategia si no se ordena.","respuesta_whatsapp":"Entiendo que quieras vender pronto. Justo por eso conviene no improvisar. Salir rápido sin preparación puede generar visitas sin calidad, ofertas débiles o desgaste innecesario. Primero ordenamos la propiedad; después la presentamos.","respuesta_campo":"Si hay urgencia, con más razón hay que ordenar antes de publicar. La prisa sin estrategia suele atraer ofertas débiles.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Yo te la vendo rápido","Tengo compradores","La publicamos hoy"],"siguiente_paso":"Agendar revisión documental y estrategia de salida.","tags":["vender rapido","urgente","prisa","necesito vender"]},{"id":"vendedor_ya_publico_001","categoria":"vendedor","temperatura":"WARM","etapa":"propietario_diagnostico","situacion":"Ya publicó y no vendió","frase_cliente":"Ya la publiqué y no se vende","intencion_oculta":"Está frustrado; necesita entender diferencia entre publicar y posicionar.","respuesta_whatsapp":"Lo que te está pasando es más común de lo que parece. Muchas propiedades no fallan por ser malas, fallan porque salen al mercado sin posicionamiento claro. Publicar no es lo mismo que preparar una venta.","respuesta_campo":"Tal vez la propiedad no es el problema. Muchas veces el problema es cómo salió al mercado, con qué precio, qué narrativa y qué filtro de compradores.","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["Está mal publicada","Tu precio está mal","Yo sí puedo"],"siguiente_paso":"Ofrecer diagnóstico de mercado y preparación.","tags":["ya publique","no se vende","sin resultados","mercado"]},{"id":"seguimiento_no_responde_001","categoria":"comprador","temperatura":"WARM","etapa":"reactivacion","situacion":"No responde después de mostrar interés","frase_cliente":"Sin respuesta","intencion_oculta":"Bajó emoción, se ocupó o está evitando decidir.","respuesta_whatsapp":"[NOMBRE], dejo tu evaluación abierta. Si esta propiedad sigue siendo opción para ti, conviene definir si avanzamos a visita o si la descartamos con claridad. Así no pierdes tiempo comparando algo que quizá ya no corresponde contigo.","respuesta_campo":"Te dejo abierta la opción, pero lo ideal es decidir si avanzamos o descartamos. La claridad también ayuda cuando no es la propiedad correcta.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Hola, ¿sigues interesado?","Quedo pendiente","¿Qué pasó?"],"siguiente_paso":"Cerrar bucle sin perseguir.","tags":["no responde","ghosting","seguimiento","reactivar"]},{"id":"comprador_postvisita_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Silencio después de la visita","frase_cliente":"Ya la vimos, gracias · sin respuesta posterior","intencion_oculta":"Le gustó pero algo lo frena. El silencio no es rechazo — es parálisis.","respuesta_whatsapp":"[NOMBRE], después de una visita el silencio generalmente significa una de dos cosas: que algo no encajó o que algo sí encajó y da vértigo. ¿Cuál fue tu caso con esta propiedad?","respuesta_campo":"[NOMBRE], ver una propiedad y quedarse pensando en ella es exactamente como debe funcionar. Si te quedó dando vueltas, algo hizo clic. ¿Qué fue lo que más te llamó?","variables":["NOMBRE","PROPIEDAD","SEGUNDA_VISITA"],"no_decir":["¿Qué te pareció?","¿Tienes alguna duda?","Quedamos en contacto","¿Ya decidieron?"],"siguiente_paso":"Identificar si es objeción real o parálisis emocional.","tags":["silencio","post visita","no responde","ya la vimos","gracias"]},{"id":"comprador_comparacion_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Compara con otra propiedad","frase_cliente":"Estoy viendo otra que también me gustó","intencion_oculta":"Tiene intención real de compra. La oportunidad es posicionarse como el asesor que ayuda a decidir bien.","respuesta_whatsapp":"Es exactamente lo correcto, [NOMBRE]. Comparar bien antes de decidir es señal de que esto va en serio. Cuéntame qué tiene la otra que te llama — me ayuda a que puedas comparar con criterio real, no solo con fotos.","respuesta_campo":"Tener dos opciones que te gustan es una buena posición, [NOMBRE]. Dime: ¿qué es lo que cada una tiene que la otra no? A veces al decirlo en voz alta se aclara sola.","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["La nuestra es mejor","La otra no tiene lo que esta tiene","¿Por qué no decide ya?"],"siguiente_paso":"Convertirse en el asesor que ayuda a decidir, no en el que vende una propiedad específica.","tags":["otra propiedad","comparando","otra opcion","tengo otra"]},{"id":"comprador_descuento_001","categoria":"comprador","temperatura":"HOT","etapa":"objecion","situacion":"Pide descuento o negociación","frase_cliente":"¿En cuánto me la dejan? · ¿Tiene chance de bajar?","intencion_oculta":"Está probando si hay margen o si el asesor cede fácil. Ceder de inmediato destruye el valor percibido.","respuesta_whatsapp":"El precio está en [PRECIO] y tiene sustento: [ARGUMENTO_VALOR]. Si hay algo específico que sientes que no empata con el precio, dímelo — puedo ayudarte a revisar si hay forma de estructurar la operación diferente.","respuesta_campo":"El precio refleja [ARGUMENTO_VALOR]. Lo que sí podemos revisar es si hay una estructura de pago que te dé más flexibilidad sin mover el valor de la propiedad.","variables":["NOMBRE","PRECIO","ARGUMENTO_VALOR"],"no_decir":["Le digo al propietario a ver qué dice","Algo se puede hacer","Está negociable"],"siguiente_paso":"Defender el precio con argumento. Si hay objeción real de presupuesto, explorar estructura de pago.","tags":["descuento","bajar precio","cuanto me dejan","negociar","oferta"]},{"id":"comprador_primer_contacto_001","categoria":"comprador","temperatura":"COLD","etapa":"primer_contacto","situacion":"Primer contacto frío desde portal","frase_cliente":"Llega por portal sin contexto previo","intencion_oculta":"Está en modo exploración. El primer mensaje define si eres uno más del montón o alguien diferente.","respuesta_whatsapp":"Hola [NOMBRE], vi que te llamó [PROPIEDAD] en [ZONA]. Antes de mandarte info genérica, dime una cosa: ¿qué fue lo que hizo que abrieras ese anuncio en particular?","respuesta_campo":"Hola [NOMBRE], qué bueno que te llegó esta propiedad. Para que la información que te comparta realmente valga la pena, cuéntame: ¿qué estás buscando en este momento — zona, tamaño, inversión?","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["Hola, ¿en qué le puedo ayudar?","Con gusto le mando información","Buenos días, soy [nombre] de [empresa]"],"siguiente_paso":"Abrir conversación con pregunta que cualifica intención. No enviar ficha técnica todavía.","tags":["portal","inmuebles24","vivanuncios","primer contacto","llego por","hola","buenos dias"]},{"id":"vendedor_captacion_001","categoria":"vendedor","temperatura":"COLD","etapa":"primer_contacto","situacion":"Primer contacto — captación","frase_cliente":"Quiero vender mi casa","intencion_oculta":"Todavía no confía. Está evaluando si eres diferente a los asesores que ya lo llamaron.","respuesta_whatsapp":"[NOMBRE], antes de hablar de precio o proceso, cuéntame una cosa: ¿por qué estás vendiendo ahora? Entender eso me ayuda a saber qué tipo de proceso necesita tu propiedad.","respuesta_campo":"[NOMBRE], qué bueno que llegaste. Antes de cualquier cosa, cuéntame: ¿qué te llevó a tomar la decisión de vender en este momento?","variables":["NOMBRE","ZONA","PROPIEDAD"],"no_decir":["¿A cuánto quiere vender?","Le mando información de mis servicios","Tengo compradores interesados"],"siguiente_paso":"Abrir con pregunta de contexto, no de precio. El que escucha primero gana la confianza.","tags":["quiero vender","vender mi casa","captacion","propietario","nuevo vendedor"]},{"id":"vendedor_precio_bajo_001","categoria":"vendedor","temperatura":"HOT","etapa":"objecion","situacion":"Quiere bajar el precio de venta","frase_cliente":"Creo que hay que bajarle · Ya llevo tiempo y no hay ofertas","intencion_oculta":"Está asustado. Bajar el precio es lo único que se le ocurre. El trabajo es redirigir hacia posicionamiento.","respuesta_whatsapp":"[NOMBRE], antes de mover el precio necesitamos entender por qué no han llegado ofertas. Bajar sin diagnóstico es perder valor sin garantía de resultado. Revisemos primero: ¿qué se ha hecho en posicionamiento hasta ahora?","respuesta_campo":"Entiendo que el tiempo pesa, [NOMBRE]. Pero bajar el precio sin saber por qué no hay ofertas es como bajar la fiebre sin tratar la infección. ¿Me cuentas cómo ha estado el flujo de interesados?","variables":["NOMBRE","PRECIO","SEMANAS","ZONA"],"no_decir":["Sí, hay que bajarle","El mercado está difícil","¿Cuánto estaría dispuesto a bajar?"],"siguiente_paso":"Diagnóstico de posicionamiento antes de cualquier movimiento de precio.","tags":["bajar precio","bajarle","sin ofertas","no se vende","hay que bajar"]},{"id":"vendedor_desconfianza_001","categoria":"vendedor","temperatura":"COLD","etapa":"objecion","situacion":"Desconfía del proceso o del asesor","frase_cliente":"¿Y cómo sé que funciona? · Ya trabajé con uno y no pasó nada","intencion_oculta":"Fue quemado antes. No está rechazando al asesor actual — está rechazando la experiencia anterior.","respuesta_whatsapp":"Tiene sentido dudar, [NOMBRE]. Si un proceso anterior no funcionó, lo lógico es no confiar en el siguiente. No te voy a pedir que confíes en mí — te voy a pedir que revises cómo trabajo y decidas tú mismo si tiene sentido.","respuesta_campo":"[NOMBRE], lo que describes es más común de lo que debería ser. No voy a pedirte que me creas de entrada — solo te pido que me dejes mostrarte en qué es diferente el proceso.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Conmigo va a ser diferente","Yo sí me comprometo","Los otros no saben trabajar","Le garantizo resultados"],"siguiente_paso":"No competir con el pasado. Mostrar el proceso como prueba — no las palabras.","tags":["como se que funciona","no confio","otro asesor no funciono","ya trabaje con uno","desconfianza"]},{"id":"vendedor_exclusiva_001","categoria":"vendedor","temperatura":"WARM","etapa":"objecion","situacion":"No quiere dar exclusividad","frase_cliente":"Prefiero tenerla con varios asesores · ¿Por qué solo con usted?","intencion_oculta":"Cree que más asesores = más opciones = venta más rápida. No está rechazando la exclusiva — está rechazando lo que cree que implica.","respuesta_whatsapp":"[NOMBRE], la lógica de tener varios asesores tiene sentido intuitivamente. El problema es que en la práctica produce lo contrario: nadie invierte en posicionar una propiedad que también está manejando la competencia.","respuesta_campo":"[NOMBRE], te propongo esto: exclusiva por [PLAZO] días con entregables claros en cada etapa. Si en ese tiempo no hay avance real documentado, puedes terminar el acuerdo.","variables":["NOMBRE","PLAZO","PROPIEDAD"],"no_decir":["Sin exclusiva no trabajo","Es la política de la empresa","Los otros asesores no van a hacer nada"],"siguiente_paso":"Proponer exclusiva por tiempo definido con compromisos documentados.","tags":["exclusiva","varios asesores","por que solo con usted","no quiero exclusiva"]},{"id":"postvisita_gusta_no_avanza_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Le gustó pero no avanza","frase_cliente":"Estuvo muy bien · Me gustó mucho · y después silencio","intencion_oculta":"Ya tomó la decisión emocionalmente pero no sabe cómo dar el siguiente paso o teme el compromiso.","respuesta_whatsapp":"[NOMBRE], cuando algo gusta de verdad, el siguiente paso es concreto. Para esta propiedad es: [SIGUIENTE_PASO_PROCESO]. ¿Lo revisamos juntos esta semana o prefieres que te mande la información por escrito primero?","respuesta_campo":"[NOMBRE], me alegra que la visita haya sido buena. Lo que ayuda es clarificar qué sigue — no para presionar, sino para que sepas exactamente en qué etapa estarías. ¿Te cuento cómo funciona el proceso a partir de aquí?","variables":["NOMBRE","SIGUIENTE_PASO_PROCESO","PROPIEDAD"],"no_decir":["¿Entonces qué decidieron?","¿Les gustó o no?","Avíseme cuando quieran avanzar"],"siguiente_paso":"Describir el siguiente paso del proceso con claridad absoluta. El cierre no es presión — es eliminar la incertidumbre sobre qué sigue.","tags":["me gusto","estuvo bien","post visita","no avanza","silencio despues de visita"]},{"id":"postvisita_pareja_familia_001","categoria":"comprador","temperatura":"WARM","etapa":"post_visita","situacion":"Pide tiempo para hablar con pareja o familia","frase_cliente":"Necesito hablarlo con mi esposo · Lo consulto con mi familia","intencion_oculta":"No es una excusa — es real. La clave es no desaparecer mientras consultan.","respuesta_whatsapp":"[NOMBRE], tiene todo el sentido consultarlo. Para que esa conversación sea productiva, ¿te parece si te mando un resumen claro de la propiedad y el proceso? Así tienen la misma información cuando lo hablen.","respuesta_campo":"Claro, [NOMBRE]. Solo quiero asegurarme de que quien lo vaya a escuchar tenga la información completa. ¿Le mandaríamos algo directamente a tu [PAREJA/FAMILIAR] también?","variables":["NOMBRE","PROPIEDAD","FECHA_SEGUIMIENTO"],"no_decir":["Avíseme cuando hablen","No hay prisa","Lo que decidan está bien"],"siguiente_paso":"Enviar resumen claro antes de que consulten. Fijar fecha concreta de seguimiento.","tags":["hablarlo con mi esposa","consultar familia","mi pareja","lo hablo en casa","mi esposo"]},{"id":"postvisita_segunda_visita_001","categoria":"comprador","temperatura":"HOT","etapa":"cita","situacion":"Segunda visita — cómo conducirla","frase_cliente":"Queremos volver a verla · Voy a ir con mi pareja","intencion_oculta":"El lead ya superó el filtro emocional. Quien trae a otra persona ya está casi convencido — la duda ahora es de quien viene nuevo.","respuesta_whatsapp":"[NOMBRE], para la segunda visita ya sé qué te importó más la primera vez. Vamos a revisar [PUNTO_CLAVE] con más detalle y a que tu acompañante pueda ver todo lo que tú ya viste. ¿Hay algo específico que quieres que revisemos?","respuesta_campo":"Qué bueno que regresan, [NOMBRE]. Voy a enfocar el recorrido en lo que más les importa a los dos. ¿Me cuentas un poco sobre tu acompañante y qué es lo que más le preocupa antes de llegar?","variables":["NOMBRE","PUNTO_CLAVE","PROPIEDAD"],"no_decir":["Igual que la primera vez","Ya saben cómo es","¿Y ya van a decidir?"],"siguiente_paso":"Preparar la segunda visita con foco en el acompañante nuevo.","tags":["segunda visita","volver a ver","ir con mi pareja","quiero que la vea","segunda vez"]},{"id":"credito_no_califico_001","categoria":"credito","temperatura":"WARM","etapa":"objecion","situacion":"No me alcanza o no califico","frase_cliente":"Creo que no califico · No me alcanza · Mi crédito no es suficiente","intencion_oculta":"Tiene miedo al rechazo antes de intentarlo. No es un no — es un no sé.","respuesta_whatsapp":"[NOMBRE], no calificas o no alcanza son dos cosas muy diferentes. Antes de descartarlo, cuéntame: ¿ya te hicieron una pre-calificación formal o es una estimación tuya? Muchos casos que parecen imposibles tienen solución cuando se revisan bien.","respuesta_campo":"[NOMBRE], la mayoría de los casos que parecen cerrados tienen alternativa. ¿Ya tienes una precalificación o lo estás calculando tú solo? Eso cambia todo.","variables":["NOMBRE","TIPO_CREDITO","MONTO","ENGANCHE"],"no_decir":["Sí, con ese crédito no puede","Necesita más enganche","No hay mucho que hacer"],"siguiente_paso":"Distinguir entre precalificación real y estimación propia.","tags":["no califico","no me alcanza","no tengo suficiente","credito insuficiente","no puedo"]},{"id":"credito_infonavit_001","categoria":"credito","temperatura":"WARM","etapa":"primer_contacto","situacion":"Infonavit puro — preguntas","frase_cliente":"¿Aceptan Infonavit? · ¿Cuánto me prestan con Infonavit? · Solo tengo Infonavit","intencion_oculta":"Quiere saber si es viable antes de ilusionarse. El trabajo es no confirmar ese miedo sin revisar su caso real.","respuesta_whatsapp":"[NOMBRE], sí aplica Infonavit. Lo que necesito saber para decirte si esta propiedad es viable para ti: ¿cuánto tienes en tu subcuenta aproximadamente y cuánto ganas al mes? Con eso te digo en 5 minutos si empata.","respuesta_campo":"Sí aplica. Para no darte un número que no corresponda a tu caso, dime: subcuenta aproximada y salario mensual. Así te digo si esta propiedad es opción real para ti.","variables":["NOMBRE","SUBCUENTA","SALARIO","PRECIO"],"no_decir":["Con Infonavit no alcanza para esto","Necesita complementar","Busque algo más barato"],"siguiente_paso":"Pedir subcuenta y salario antes de cualquier número. No descartar sin datos reales.","tags":["infonavit","solo tengo infonavit","cuanto me prestan","subcuenta","derechohabiente"]},{"id":"credito_aprobado_001","categoria":"credito","temperatura":"HOT","etapa":"primer_contacto","situacion":"Ya tiene crédito aprobado","frase_cliente":"Ya tengo mi crédito aprobado · Ya me lo autorizaron","intencion_oculta":"Tiene poder de compra real y está listo. El error es demorarse — este lead necesita velocidad y claridad.","respuesta_whatsapp":"Excelente, [NOMBRE]. Con crédito aprobado el proceso se simplifica mucho. Para no perderte tiempo, dime: ¿cuánto te aprobaron, de qué tipo es el crédito y cuánto tienes disponible para enganche? Con eso te digo exactamente qué propiedades te funcionan.","respuesta_campo":"Con crédito aprobado ya tienes el paso más difícil resuelto, [NOMBRE]. Dime monto aprobado, tipo de crédito y enganche — así te muestro opciones que realmente empatan con tu capacidad.","variables":["NOMBRE","MONTO","TIPO_CREDITO","ENGANCHE"],"no_decir":["Qué bueno","Te mando opciones","¿Cuándo quieres ver algo?"],"siguiente_paso":"Calificar rápido: monto, tipo y enganche. Pasar a propiedades específicas sin demora.","tags":["credito aprobado","ya me lo dieron","ya tengo credito","aprobado","autorizado"]}];
+/* ══ MENSAJES ══ */
+const MSGS=[{"id":"comprador_precio_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Pregunta precio antes de dar contexto","frase_cliente":"¿Cuánto cuesta?","intencion_oculta":"Quiere filtrar rápido, comparar o controlar la conversación sin revelar intención real.","respuesta_whatsapp":"El precio es $[PRECIO]. Lo importante es revisar si por zona, distribución, estado y forma de pago tiene sentido para ti. Si esos puntos están alineados, entonces sí vale la pena avanzar a una visita de validación.","respuesta_campo":"Claro, el precio es $[PRECIO]. Pero más que verlo solo como número, conviene revisar si esta casa empata con tu forma de compra: zona, distribución, estado y forma de pago.","variables":["NOMBRE","PRECIO","ZONA","PROPIEDAD"],"no_decir":["Está en oferta","Aprovecha","Es negociable","¿Cuándo la quiere ver?"],"siguiente_paso":"Validar forma de pago y zona antes de proponer visita.","tags":["precio","cuanto cuesta","valor","costo"]},{"id":"comprador_ubicacion_001","categoria":"comprador","temperatura":"COLD","etapa":"objecion","situacion":"Pide ubicación exacta sin validar interés","frase_cliente":"¿Dónde está exactamente?","intencion_oculta":"Puede querer pasar por fuera, comparar o saltarse el proceso de seguridad.","respuesta_whatsapp":"La propiedad está en [ZONA]. Por seguridad del propietario, la ubicación exacta se comparte cuando la visita queda confirmada. Si la zona sí te funciona, revisamos disponibilidad.","respuesta_campo":"Está en [ZONA]. La ubicación exacta la cuidamos hasta confirmar visita, por seguridad de la propiedad y del propietario.","variables":["ZONA","PROPIEDAD"],"no_decir":["Te mando la ubicación","Pásale cuando quieras","Ahí está el pin"],"siguiente_paso":"Confirmar si la zona le funciona antes de abrir visita.","tags":["ubicacion","direccion","pin","referencia","donde"]},{"id":"comprador_credito_001","categoria":"credito","temperatura":"WARM","etapa":"primer_contacto","situacion":"Pregunta si aceptan crédito","frase_cliente":"¿Aceptan crédito?","intencion_oculta":"Hay intención real, pero falta validar viabilidad financiera y tiempos.","respuesta_whatsapp":"Sí, puede revisarse con crédito. Lo importante es validar desde el inicio si tu crédito está listo para esta operación o si habría que ajustar algo antes de avanzar. Eso evita visitas que después no se pueden concretar.","respuesta_campo":"Sí acepta crédito. Antes de verla, conviene revisar si tu crédito realmente empata con el valor y tiempos de esta propiedad.","variables":["NOMBRE","PROPIEDAD","PRECIO"],"no_decir":["Sí, sin problema","Aceptamos todos","Solo mándame tu crédito"],"siguiente_paso":"Pedir tipo de crédito, monto aproximado aprobado y enganche disponible.","tags":["credito","infonavit","fovissste","banco","financiamiento"]},{"id":"comprador_solo_viendo_001","categoria":"comprador","temperatura":"COLD","etapa":"objecion","situacion":"Dice que solo está viendo opciones","frase_cliente":"Solo estoy viendo","intencion_oculta":"No quiere presión, está explorando o aún no tiene claridad de compra.","respuesta_whatsapp":"No pasa nada. De hecho, ver opciones sin estructura suele cansar más que ayudar. Si me dices qué estás tratando de resolver con tu próxima casa, puedo decirte si esta propiedad merece tu atención o no.","respuesta_campo":"Está bien. Solo te diría algo: ver por ver muchas veces confunde. Si entiendo qué estás buscando resolver, te digo si esta opción vale la pena para ti.","variables":["PROPIEDAD","ZONA"],"no_decir":["Avísame si te interesa","Sin compromiso","Entonces luego me dices"],"siguiente_paso":"Hacer una pregunta de diagnóstico: zona, presupuesto o motivo de cambio.","tags":["solo estoy viendo","viendo opciones","informacion","curioso"]},{"id":"comprador_visita_001","categoria":"comprador","temperatura":"HOT","etapa":"cita","situacion":"Quiere visitar la propiedad","frase_cliente":"¿Cuándo puedo verla?","intencion_oculta":"Tiene interés activo; hay que ordenar visita sin perder autoridad.","respuesta_whatsapp":"Por tu perfil, sí vale la pena hacer una visita. No como recorrido casual, sino como validación final para saber si esta propiedad realmente encaja contigo. Tengo espacio [HORARIO_1] o [HORARIO_2]. ¿Cuál te funciona mejor?","respuesta_campo":"Sí tiene sentido verla. La visita nos sirve para validar distribución, entorno, sensación real y forma de pago. Te puedo abrir [HORARIO_1] o [HORARIO_2].","variables":["NOMBRE","PROPIEDAD","HORARIO_1","HORARIO_2"],"no_decir":["Cuando quieras","Te la muestro hoy mismo","Pásame tus datos"],"siguiente_paso":"Confirmar horario, nombre completo y forma de pago.","tags":["visita","cita","verla","recorrido","agenda"]},{"id":"comprador_caro_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Dice que está caro","frase_cliente":"Está caro","intencion_oculta":"Está comparando por precio, no por valor completo.","respuesta_whatsapp":"Entiendo. Solo cuidaría no comparar únicamente por precio. En una propiedad también pesan zona, estado, distribución, seguridad jurídica y forma de pago. Si quieres, revisamos contra qué la estás comparando y te digo si tiene sentido o no.","respuesta_campo":"Puede sentirse alto si lo ves solo como número. La comparación correcta es con zona, estado, distribución y condiciones reales de operación.","variables":["ZONA","PRECIO","PROPIEDAD"],"no_decir":["Se puede negociar","Está barata para la zona","Es lo que vale"],"siguiente_paso":"Pedir referencia de comparación y recuperar valor.","tags":["caro","precio alto","comparando","barato"]},{"id":"comprador_pensar_001","categoria":"comprador","temperatura":"WARM","etapa":"seguimiento","situacion":"Dice que lo va a pensar","frase_cliente":"Lo voy a pensar","intencion_oculta":"Tiene duda no nombrada: precio, forma de pago, zona, familia o miedo a decidir.","respuesta_whatsapp":"Claro. Solo para que lo pienses con información correcta: ¿lo que necesitas revisar es precio, forma de pago, zona o sensación de la propiedad? Son dudas distintas y cada una se resuelve diferente.","respuesta_campo":"Claro, piénsalo. Pero dime algo: ¿qué parte necesitas ordenar mejor, precio, crédito, zona o sensación de la casa? No todas las dudas se resuelven igual.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Avísame","Quedo pendiente","No tardes porque se va"],"siguiente_paso":"Identificar la duda real y enviar respuesta específica.","tags":["pensar","lo reviso","despues","duda"]},{"id":"comprador_postvisita_hot_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Después de visita con interés alto","frase_cliente":"Me gustó mucho","intencion_oculta":"Hay emoción; se debe pasar a condiciones sin presionar.","respuesta_whatsapp":"Me da gusto que te haya hecho sentido. El siguiente paso no es apartar por presión; es revisar condiciones: forma de pago, tiempos, documentos y viabilidad. Si eso está claro, entonces sí podemos avanzar con seguridad.","respuesta_campo":"Si te hizo sentido en persona, ahora lo correcto es revisar condiciones. Así no decides por emoción, sino con claridad.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Entonces aparta","Se te puede ir","Dame anticipo"],"siguiente_paso":"Revisar condiciones y ruta de apartado.","tags":["post visita","me gusto","interes","apartado","cierre"]},{"id":"vendedor_comision_001","categoria":"vendedor","temperatura":"WARM","etapa":"propietario_diagnostico","situacion":"Propietario pregunta comisión antes de entender proceso","frase_cliente":"¿Cuánto cobras de comisión?","intencion_oculta":"Quiere comparar asesores como costo, no como proceso de protección patrimonial.","respuesta_whatsapp":"Entiendo la pregunta. La comisión no debería verse aislada, sino contra el tipo de proceso que protege tu operación. Lo importante es qué se hace antes, durante y después de publicar para evitar errores, desgaste o negociación débil.","respuesta_campo":"Te entiendo. Solo cuidaría no ver la comisión separada del proceso. Una venta mal preparada puede costar más que una comisión bien justificada.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Cobro X%","Soy más barato","Te puedo bajar la comisión"],"siguiente_paso":"Proponer diagnóstico antes de hablar solo de porcentaje.","tags":["comision","porcentaje","cuanto cobras","honorarios"]},{"id":"vendedor_rapido_001","categoria":"vendedor","temperatura":"HOT","etapa":"propietario_diagnostico","situacion":"Propietario quiere vender rápido","frase_cliente":"Necesito vender rápido","intencion_oculta":"Tiene presión emocional o económica; puede aceptar mala estrategia si no se ordena.","respuesta_whatsapp":"Entiendo que quieras vender pronto. Justo por eso conviene no improvisar. Salir rápido sin preparación puede generar visitas sin calidad, ofertas débiles o desgaste innecesario. Primero ordenamos la propiedad; después la presentamos.","respuesta_campo":"Si hay urgencia, con más razón hay que ordenar antes de publicar. La prisa sin estrategia suele atraer ofertas débiles.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Yo te la vendo rápido","Tengo compradores","La publicamos hoy"],"siguiente_paso":"Agendar revisión documental y estrategia de salida.","tags":["vender rapido","urgente","prisa","necesito vender"]},{"id":"vendedor_ya_publico_001","categoria":"vendedor","temperatura":"WARM","etapa":"propietario_diagnostico","situacion":"Ya publicó y no vendió","frase_cliente":"Ya la publiqué y no se vende","intencion_oculta":"Está frustrado; necesita entender diferencia entre publicar y posicionar.","respuesta_whatsapp":"Lo que te está pasando es más común de lo que parece. Muchas propiedades no fallan por ser malas, fallan porque salen al mercado sin posicionamiento claro. Publicar no es lo mismo que preparar una venta.","respuesta_campo":"Tal vez la propiedad no es el problema. Muchas veces el problema es cómo salió al mercado, con qué precio, qué narrativa y qué filtro de compradores.","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["Está mal publicada","Tu precio está mal","Yo sí puedo"],"siguiente_paso":"Ofrecer diagnóstico de mercado y preparación.","tags":["ya publique","no se vende","sin resultados","mercado"]},{"id":"seguimiento_no_responde_001","categoria":"comprador","temperatura":"WARM","etapa":"reactivacion","situacion":"No responde después de mostrar interés","frase_cliente":"Sin respuesta","intencion_oculta":"Bajó emoción, se ocupó o está evitando decidir.","respuesta_whatsapp":"[NOMBRE], dejo tu evaluación abierta. Si esta propiedad sigue siendo opción para ti, conviene definir si avanzamos a visita o si la descartamos con claridad. Así no pierdes tiempo comparando algo que quizá ya no corresponde contigo.","respuesta_campo":"Te dejo abierta la opción, pero lo ideal es decidir si avanzamos o descartamos. La claridad también ayuda cuando no es la propiedad correcta.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Hola, ¿sigues interesado?","Quedo pendiente","¿Qué pasó?"],"siguiente_paso":"Cerrar bucle sin perseguir.","tags":["no responde","ghosting","seguimiento","reactivar"]},{"id":"comprador_postvisita_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Silencio después de la visita","frase_cliente":"Ya la vimos, gracias","intencion_oculta":"Le gustó pero algo lo frena. El silencio no es rechazo — es parálisis.","respuesta_whatsapp":"[NOMBRE], después de una visita el silencio generalmente significa una de dos cosas: que algo no encajó o que algo sí encajó y da vértigo. ¿Cuál fue tu caso con esta propiedad?","respuesta_campo":"[NOMBRE], ver una propiedad y quedarse pensando en ella es exactamente como debe funcionar. Si te quedó dando vueltas, algo hizo clic. ¿Qué fue lo que más te llamó?","variables":["NOMBRE","PROPIEDAD"],"no_decir":["¿Qué te pareció?","¿Tienes alguna duda?","Quedamos en contacto","¿Ya decidieron?"],"siguiente_paso":"Identificar si es objeción real o parálisis emocional.","tags":["silencio","post visita","no responde","ya la vimos","gracias"]},{"id":"comprador_comparacion_001","categoria":"comprador","temperatura":"WARM","etapa":"objecion","situacion":"Compara con otra propiedad","frase_cliente":"Estoy viendo otra que también me gustó","intencion_oculta":"Tiene intención real de compra. La oportunidad es posicionarse como el asesor que ayuda a decidir bien.","respuesta_whatsapp":"Es exactamente lo correcto, [NOMBRE]. Comparar bien antes de decidir es señal de que esto va en serio. Cuéntame qué tiene la otra que te llama — me ayuda a que puedas comparar con criterio real, no solo con fotos.","respuesta_campo":"Tener dos opciones que te gustan es una buena posición, [NOMBRE]. Dime: ¿qué es lo que cada una tiene que la otra no? A veces al decirlo en voz alta se aclara sola.","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["La nuestra es mejor","La otra no tiene lo que esta tiene","¿Por qué no decide ya?"],"siguiente_paso":"Convertirse en el asesor que ayuda a decidir, no en el que vende una propiedad específica.","tags":["otra propiedad","comparando","otra opcion","tengo otra"]},{"id":"comprador_descuento_001","categoria":"comprador","temperatura":"HOT","etapa":"objecion","situacion":"Pide descuento o negociación","frase_cliente":"¿En cuánto me la dejan?","intencion_oculta":"Está probando si hay margen o si el asesor cede fácil. Ceder de inmediato destruye el valor percibido.","respuesta_whatsapp":"El precio está en [PRECIO] y tiene sustento: [ARGUMENTO_VALOR]. Si hay algo específico que sientes que no empata con el precio, dímelo — puedo ayudarte a revisar si hay forma de estructurar la operación diferente.","respuesta_campo":"El precio refleja [ARGUMENTO_VALOR]. Lo que sí podemos revisar es si hay una estructura de pago que te dé más flexibilidad sin mover el valor de la propiedad.","variables":["NOMBRE","PRECIO","ARGUMENTO_VALOR"],"no_decir":["Le digo al propietario a ver qué dice","Algo se puede hacer","Está negociable"],"siguiente_paso":"Defender el precio con argumento. Explorar estructura de pago antes de mover el precio.","tags":["descuento","bajar precio","cuanto me dejan","negociar","oferta"]},{"id":"comprador_primer_contacto_001","categoria":"comprador","temperatura":"COLD","etapa":"primer_contacto","situacion":"Primer contacto frío desde portal","frase_cliente":"Llega por portal sin contexto previo","intencion_oculta":"Está en modo exploración. El primer mensaje define si eres uno más del montón o alguien diferente.","respuesta_whatsapp":"Hola [NOMBRE], vi que te llamó [PROPIEDAD] en [ZONA]. Antes de mandarte info genérica, dime una cosa: ¿qué fue lo que hizo que abrieras ese anuncio en particular?","respuesta_campo":"Hola [NOMBRE], qué bueno que te llegó esta propiedad. Para que la información que te comparta realmente valga la pena, cuéntame: ¿qué estás buscando en este momento — zona, tamaño, inversión?","variables":["NOMBRE","PROPIEDAD","ZONA"],"no_decir":["Hola, ¿en qué le puedo ayudar?","Con gusto le mando información","Buenos días, soy [nombre] de [empresa]"],"siguiente_paso":"Abrir conversación con pregunta que cualifica intención. No enviar ficha técnica todavía.","tags":["portal","inmuebles24","vivanuncios","primer contacto","hola","buenos dias"]},{"id":"vendedor_captacion_001","categoria":"vendedor","temperatura":"COLD","etapa":"primer_contacto","situacion":"Primer contacto — captación","frase_cliente":"Quiero vender mi casa","intencion_oculta":"Todavía no confía. Está evaluando si eres diferente a los asesores que ya lo llamaron.","respuesta_whatsapp":"[NOMBRE], antes de hablar de precio o proceso, cuéntame una cosa: ¿por qué estás vendiendo ahora? Entender eso me ayuda a saber qué tipo de proceso necesita tu propiedad.","respuesta_campo":"[NOMBRE], qué bueno que llegaste. Antes de cualquier cosa, cuéntame: ¿qué te llevó a tomar la decisión de vender en este momento?","variables":["NOMBRE","ZONA","PROPIEDAD"],"no_decir":["¿A cuánto quiere vender?","Le mando información de mis servicios","Tengo compradores interesados"],"siguiente_paso":"Abrir con pregunta de contexto, no de precio.","tags":["quiero vender","vender mi casa","captacion","propietario","nuevo vendedor"]},{"id":"vendedor_precio_bajo_001","categoria":"vendedor","temperatura":"HOT","etapa":"objecion","situacion":"Quiere bajar el precio de venta","frase_cliente":"Creo que hay que bajarle","intencion_oculta":"Está asustado. Bajar el precio es lo único que se le ocurre.","respuesta_whatsapp":"[NOMBRE], antes de mover el precio necesitamos entender por qué no han llegado ofertas. Bajar sin diagnóstico es perder valor sin garantía de resultado.","respuesta_campo":"Entiendo que el tiempo pesa, [NOMBRE]. Pero bajar el precio sin saber por qué no hay ofertas es como bajar la fiebre sin tratar la infección. ¿Me cuentas cómo ha estado el flujo de interesados?","variables":["NOMBRE","PRECIO","ZONA"],"no_decir":["Sí, hay que bajarle","El mercado está difícil","¿Cuánto estaría dispuesto a bajar?"],"siguiente_paso":"Diagnóstico de posicionamiento antes de cualquier movimiento de precio.","tags":["bajar precio","bajarle","sin ofertas","no se vende","hay que bajar"]},{"id":"vendedor_desconfianza_001","categoria":"vendedor","temperatura":"COLD","etapa":"objecion","situacion":"Desconfía del proceso o del asesor","frase_cliente":"¿Y cómo sé que funciona?","intencion_oculta":"Fue quemado antes. No está rechazando al asesor actual — está rechazando la experiencia anterior.","respuesta_whatsapp":"Tiene sentido dudar, [NOMBRE]. Si un proceso anterior no funcionó, lo lógico es no confiar en el siguiente. No te voy a pedir que confíes en mí — te voy a pedir que revises cómo trabajo y decidas tú mismo si tiene sentido.","respuesta_campo":"[NOMBRE], no voy a pedirte que me creas de entrada — solo te pido que me dejes mostrarte en qué es diferente el proceso.","variables":["NOMBRE","PROPIEDAD"],"no_decir":["Conmigo va a ser diferente","Yo sí me comprometo","Le garantizo resultados"],"siguiente_paso":"Mostrar el proceso como prueba — no las palabras.","tags":["como se que funciona","no confio","ya trabaje con uno","desconfianza"]},{"id":"vendedor_exclusiva_001","categoria":"vendedor","temperatura":"WARM","etapa":"objecion","situacion":"No quiere dar exclusividad","frase_cliente":"Prefiero tenerla con varios asesores","intencion_oculta":"Cree que más asesores = venta más rápida. No está rechazando la exclusiva — está rechazando lo que cree que implica.","respuesta_whatsapp":"[NOMBRE], la lógica de tener varios asesores tiene sentido intuitivamente. El problema es que en la práctica produce lo contrario: nadie invierte en posicionar una propiedad que también está manejando la competencia.","respuesta_campo":"[NOMBRE], te propongo: exclusiva por [PLAZO] días con entregables claros. Si no hay avance documentado, puedes terminar el acuerdo.","variables":["NOMBRE","PLAZO","PROPIEDAD"],"no_decir":["Sin exclusiva no trabajo","Es la política de la empresa"],"siguiente_paso":"Proponer exclusiva por tiempo definido con compromisos documentados.","tags":["exclusiva","varios asesores","por que solo con usted","no quiero exclusiva"]},{"id":"postvisita_gusta_no_avanza_001","categoria":"comprador","temperatura":"HOT","etapa":"post_visita","situacion":"Le gustó pero no avanza","frase_cliente":"Estuvo muy bien · y después silencio","intencion_oculta":"Ya tomó la decisión emocionalmente pero no sabe cómo dar el siguiente paso.","respuesta_whatsapp":"[NOMBRE], cuando algo gusta de verdad, el siguiente paso es concreto. Para esta propiedad es: [SIGUIENTE_PASO_PROCESO]. ¿Lo revisamos juntos esta semana o prefieres que te mande la información por escrito primero?","respuesta_campo":"[NOMBRE], lo que ayuda es clarificar qué sigue — no para presionar, sino para que sepas exactamente en qué etapa estarías. ¿Te cuento cómo funciona el proceso a partir de aquí?","variables":["NOMBRE","SIGUIENTE_PASO_PROCESO","PROPIEDAD"],"no_decir":["¿Entonces qué decidieron?","Avíseme cuando quieran avanzar"],"siguiente_paso":"Describir el siguiente paso con claridad. El cierre no es presión — es eliminar la incertidumbre.","tags":["me gusto","estuvo bien","post visita","no avanza","silencio despues de visita"]},{"id":"postvisita_pareja_familia_001","categoria":"comprador","temperatura":"WARM","etapa":"post_visita","situacion":"Pide tiempo para hablar con pareja o familia","frase_cliente":"Necesito hablarlo con mi esposo","intencion_oculta":"No es una excusa — es real. La clave es no desaparecer mientras consultan.","respuesta_whatsapp":"[NOMBRE], tiene todo el sentido consultarlo. Para que esa conversación sea productiva, ¿te parece si te mando un resumen claro de la propiedad y el proceso? Así tienen la misma información cuando lo hablen.","respuesta_campo":"Claro, [NOMBRE]. Solo quiero asegurarme de que quien lo vaya a escuchar tenga la información completa.","variables":["NOMBRE","PROPIEDAD","FECHA_SEGUIMIENTO"],"no_decir":["Avíseme cuando hablen","No hay prisa","Lo que decidan está bien"],"siguiente_paso":"Enviar resumen claro antes de que consulten. Fijar fecha concreta de seguimiento.","tags":["hablarlo con mi esposa","consultar familia","mi pareja","lo hablo en casa","mi esposo"]},{"id":"postvisita_segunda_visita_001","categoria":"comprador","temperatura":"HOT","etapa":"cita","situacion":"Segunda visita — cómo conducirla","frase_cliente":"Queremos volver a verla","intencion_oculta":"El lead ya superó el filtro emocional. Quien trae a otra persona ya está casi convencido.","respuesta_whatsapp":"[NOMBRE], para la segunda visita ya sé qué te importó más la primera vez. Vamos a revisar [PUNTO_CLAVE] con más detalle. ¿Hay algo específico que quieres que revisemos?","respuesta_campo":"Qué bueno que regresan, [NOMBRE]. Voy a enfocar el recorrido en lo que más les importa a los dos.","variables":["NOMBRE","PUNTO_CLAVE","PROPIEDAD"],"no_decir":["Igual que la primera vez","Ya saben cómo es","¿Y ya van a decidir?"],"siguiente_paso":"Preparar la segunda visita con foco en el acompañante nuevo.","tags":["segunda visita","volver a ver","ir con mi pareja","segunda vez"]},{"id":"credito_no_califico_001","categoria":"credito","temperatura":"WARM","etapa":"objecion","situacion":"No me alcanza o no califico","frase_cliente":"Creo que no califico · No me alcanza","intencion_oculta":"Tiene miedo al rechazo antes de intentarlo. No es un no — es un no sé.","respuesta_whatsapp":"[NOMBRE], no calificas o no alcanza son dos cosas muy diferentes. Antes de descartarlo, cuéntame: ¿ya te hicieron una pre-calificación formal o es una estimación tuya?","respuesta_campo":"[NOMBRE], la mayoría de los casos que parecen cerrados tienen alternativa. ¿Ya tienes una precalificación o lo estás calculando tú solo?","variables":["NOMBRE","TIPO_CREDITO","MONTO","ENGANCHE"],"no_decir":["Sí, con ese crédito no puede","Necesita más enganche","No hay mucho que hacer"],"siguiente_paso":"Distinguir entre precalificación real y estimación propia.","tags":["no califico","no me alcanza","credito insuficiente","no puedo"]},{"id":"credito_infonavit_001","categoria":"credito","temperatura":"WARM","etapa":"primer_contacto","situacion":"Infonavit puro — preguntas","frase_cliente":"¿Aceptan Infonavit? · Solo tengo Infonavit","intencion_oculta":"Quiere saber si es viable antes de ilusionarse.","respuesta_whatsapp":"[NOMBRE], sí aplica Infonavit. Lo que necesito: ¿cuánto tienes en tu subcuenta aproximadamente y cuánto ganas al mes? Con eso te digo en 5 minutos si empata.","respuesta_campo":"Sí aplica. Dime: subcuenta aproximada y salario mensual. Así te digo si esta propiedad es opción real para ti.","variables":["NOMBRE","SUBCUENTA","SALARIO","PRECIO"],"no_decir":["Con Infonavit no alcanza para esto","Busque algo más barato"],"siguiente_paso":"Pedir subcuenta y salario antes de cualquier número.","tags":["infonavit","solo tengo infonavit","cuanto me prestan","subcuenta","derechohabiente"]},{"id":"credito_aprobado_001","categoria":"credito","temperatura":"HOT","etapa":"primer_contacto","situacion":"Ya tiene crédito aprobado","frase_cliente":"Ya tengo mi crédito aprobado","intencion_oculta":"Tiene poder de compra real. Este lead necesita velocidad y claridad.","respuesta_whatsapp":"Excelente, [NOMBRE]. Con crédito aprobado el proceso se simplifica mucho. Dime: ¿cuánto te aprobaron, de qué tipo es el crédito y cuánto tienes para enganche? Con eso te digo exactamente qué propiedades te funcionan.","respuesta_campo":"Con crédito aprobado ya tienes el paso más difícil resuelto, [NOMBRE]. Dime monto, tipo de crédito y enganche — así te muestro opciones que realmente empatan.","variables":["NOMBRE","MONTO","TIPO_CREDITO","ENGANCHE"],"no_decir":["Qué bueno","Te mando opciones","¿Cuándo quieres ver algo?"],"siguiente_paso":"Calificar rápido: monto, tipo y enganche. Pasar a propiedades específicas sin demora.","tags":["credito aprobado","ya me lo dieron","ya tengo credito","aprobado","autorizado"]}];
 
-let sb = null, user = null, perfil = {};
-
-/* ══ SUPABASE ══ */
-function initSB(){
-  if(!sb) sb = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-}
+/* ══ INIT ══ */
+sb = supabase.createClient(SB_URL, SB_KEY);
 
 async function signIn(){
-  initSB();
   const email = document.getElementById('lEmail').value.trim();
   const pass  = document.getElementById('lPass').value;
   document.getElementById('lErr').textContent = '';
@@ -483,26 +555,20 @@ async function signIn(){
 }
 
 async function signOut(){
-  if(sb) await sb.auth.signOut();
-  user = null; perfil = {};
+  await sb.auth.signOut();
+  user = null; perfil = {}; esAdmin = false;
   document.getElementById('app').classList.add('hidden');
   document.getElementById('login').classList.remove('hidden');
 }
 
 async function checkSession(){
-  initSB();
   const { data } = await sb.auth.getSession();
-  if(data.session?.user){
-    user = data.session.user;
-    await loadPerfil();
-    openApp();
-  }
+  if(data.session?.user){ user = data.session.user; await loadPerfil(); openApp(); }
 }
 
 async function loadPerfil(){
-  if(!sb || !user) return;
   const { data } = await sb.from('asesores').select('*').eq('id', user.id).single();
-  if(data) perfil = data;
+  if(data){ perfil = data; esAdmin = data.rol === 'admin'; }
 }
 
 function openApp(){
@@ -512,42 +578,54 @@ function openApp(){
   const inmo   = perfil.inmobiliaria || '';
   const tel    = perfil.telefono || '';
   document.getElementById('sbNombre').textContent = nombre;
-  document.getElementById('sbInmo').textContent   = inmo + (tel ? ' · ' + tel : '');
+  document.getElementById('sbRole').textContent   = inmo + (tel ? ' · ' + tel : '');
   document.getElementById('topUser').textContent  = nombre;
-  // Saludo personalizado
+  document.getElementById('sbBadge').innerHTML    = `<span class="sb-badge ${esAdmin?'admin':'asesor'}">${esAdmin?'Admin':'Asesor'}</span>`;
   const h = new Date().getHours();
-  const saludo = h < 12 ? 'Buenos días' : h < 19 ? 'Buenas tardes' : 'Buenas noches';
-  document.getElementById('saludo').textContent = saludo + ', ' + (perfil.nombre?.split(' ')[0] || '') + '. Tu sistema está listo.';
-  // Hora
-  updateHora();
-  setInterval(updateHora, 60000);
-  // Cargar CRM
+  const sal = h<12?'Buenos días':h<19?'Buenas tardes':'Buenas noches';
+  document.getElementById('saludo').textContent = sal+', '+(perfil.nombre?.split(' ')[0]||'')+'. Tu sistema está listo.';
+  updateHora(); setInterval(updateHora, 60000);
+  buildNav();
   loadCRM();
-  // Cargar panel de docs
-  loadDocs();
-  // Mensajes
+  cargarDocs();
   renderMsgs(MSGS);
-  // Archivos
-  buildFiles();
+  cargarLinks();
+  if(esAdmin){ cargarAsesores(); cargarLinksAdmin(); }
 }
 
 function updateHora(){
-  const now = new Date();
-  const h = now.getHours().toString().padStart(2,'0');
-  const m = now.getMinutes().toString().padStart(2,'0');
-  document.getElementById('horaTop').textContent = h+':'+m;
+  const n = new Date();
+  document.getElementById('horaTop').textContent = n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');
 }
 
 /* ══ NAV ══ */
 function buildNav(){
+  const panels = esAdmin ? PANELS_ADMIN : PANELS_ASESOR;
   const side = document.getElementById('sbNav');
   const mob  = document.getElementById('mobNav');
-  PANELS.forEach((p,i) => {
+  side.innerHTML = ''; mob.innerHTML = '';
+
+  if(esAdmin){
+    const secAsesor = document.createElement('div');
+    secAsesor.className = 'sb-section';
+    secAsesor.textContent = 'Operación';
+    side.appendChild(secAsesor);
+  }
+
+  panels.forEach((p,i) => {
+    if(p.adminOnly){
+      if(i === panels.findIndex(x=>x.adminOnly)){
+        const sec = document.createElement('div');
+        sec.className = 'sb-section';
+        sec.textContent = 'Administración';
+        side.appendChild(sec);
+      }
+    }
     const makeBtn = () => {
       const b = document.createElement('button');
-      b.className = 'sb-btn' + (i===0?' active':'');
+      b.className = 'sb-btn' + (p.adminOnly?' admin-btn':'') + (i===0?' active':'');
       b.dataset.panel = p.id;
-      b.innerHTML = `<span class="sb-icon">${p.icon}</span><span class="sb-label">${p.label}</span><span class="sb-dot"></span>`;
+      b.innerHTML = `<span class="sb-icon">${p.icon}</span><span class="sb-lbl">${p.label}</span><span class="sb-dot"></span>`;
       b.onclick = () => showPanel(p.id);
       return b;
     };
@@ -560,14 +638,15 @@ function showPanel(id){
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.getElementById(id)?.classList.add('active');
   document.querySelectorAll('.sb-btn').forEach(b => b.classList.toggle('active', b.dataset.panel === id));
-  const p = PANELS.find(x => x.id === id);
+  const panels = esAdmin ? PANELS_ADMIN : PANELS_ASESOR;
+  const p = panels.find(x => x.id === id);
   document.getElementById('topLabel').textContent = p?.label || 'NERI';
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
 /* ══ CRM ══ */
 function loadCRM(){
-  const url = localStorage.getItem('neri_crm');
+  const url = localStorage.getItem('neri_crm_'+user.id);
   if(!url){ document.getElementById('crmConfig').style.display='block'; return; }
   document.getElementById('airtableUrl').value = url;
   document.getElementById('crmFrame').src = url;
@@ -576,13 +655,13 @@ function loadCRM(){
 function saveCRM(){
   const url = document.getElementById('airtableUrl').value.trim();
   if(!url) return;
-  localStorage.setItem('neri_crm', url);
+  localStorage.setItem('neri_crm_'+user.id, url);
   document.getElementById('crmFrame').src = url;
   document.getElementById('crmConfig').style.display='none';
   showToast('CRM guardado');
 }
 function clearCRM(){
-  localStorage.removeItem('neri_crm');
+  localStorage.removeItem('neri_crm_'+user.id);
   document.getElementById('airtableUrl').value='';
   document.getElementById('crmFrame').removeAttribute('src');
   document.getElementById('crmConfig').style.display='block';
@@ -590,39 +669,37 @@ function clearCRM(){
 }
 
 /* ══ DOCS ══ */
-function loadDocs(){
-  // Abre el panel de citas desde Supabase con URL firmada
-  openFileInFrame('Panel_Citas.html', 'docsFrame');
+async function cargarDocs(){
+  const { data } = await sb.storage.from(BUCKET).createSignedUrl('Panel_Citas.html', URL_TTL);
+  if(data) document.getElementById('docsFrame').src = data.signedUrl;
 }
 
-async function openFileInFrame(path, frameId){
-  if(!sb){ return; }
-  const { data, error } = await sb.storage.from(CONFIG.BUCKET).createSignedUrl(path, CONFIG.URL_TTL);
-  if(error || !data){ return; }
-  document.getElementById(frameId).src = data.signedUrl;
-}
-
-/* ══ ARCHIVOS ══ */
-function buildFiles(){
-  const grid = document.getElementById('filesGrid');
-  grid.innerHTML = CONFIG.files.map(f => `
-    <div class="file-card">
-      <div class="file-icon">${f.icon}</div>
-      <div class="file-eye">${f.eye}</div>
-      <div class="file-name">${f.name}</div>
-      <p class="file-desc">${f.desc}</p>
-      <div class="file-actions">
-        <button class="btn primary" onclick="openFile('${f.path}',false)">Abrir</button>
-        <button class="btn ghost" onclick="openFile('${f.path}',true)">Descargar</button>
+/* ══ LINKS (asesor) ══ */
+async function cargarLinks(){
+  const { data } = await sb.from('links_asesor').select('*').eq('asesor_id', user.id).eq('activo', true).order('created_at');
+  const grid = document.getElementById('linksGrid');
+  document.getElementById('statLinks').textContent = data?.length || '0';
+  if(!data?.length){
+    grid.innerHTML = `<div class="link-empty"><div style="font-size:24px;margin-bottom:10px;opacity:.3">🔗</div><p style="font-size:12px">Aún no tienes links asignados.<br>Envía tu Orden de Producción para recibirlos.</p></div>`;
+    return;
+  }
+  grid.innerHTML = data.map(l => `
+    <div class="link-card">
+      <div class="link-icon">${TIPO_ICONS[l.tipo]||'🔗'}</div>
+      <div class="link-info">
+        <div class="link-tipo">${TIPO_LABEL[l.tipo]||l.tipo}</div>
+        <div class="link-nombre">${l.nombre}</div>
+        <div class="link-url">${l.url}</div>
+      </div>
+      <div class="link-actions">
+        <button class="btn primary" onclick="copiarLink('${l.url}')">Copiar</button>
+        <a href="${l.url}" target="_blank" class="btn ghost">Abrir</a>
       </div>
     </div>`).join('');
 }
 
-async function openFile(path, download=false){
-  if(!sb){ showToast('Sin conexión'); return; }
-  const { data, error } = await sb.storage.from(CONFIG.BUCKET).createSignedUrl(path, CONFIG.URL_TTL, { download });
-  if(error){ alert('No se pudo acceder: '+error.message); return; }
-  window.open(data.signedUrl, '_blank');
+function copiarLink(url){
+  navigator.clipboard.writeText(url).then(() => showToast('Link copiado'));
 }
 
 /* ══ MENSAJES ══ */
@@ -631,112 +708,179 @@ function filterMsg(){
   const cat   = document.getElementById('msgCat').value;
   const temp  = document.getElementById('msgTemp').value;
   const etapa = document.getElementById('msgEtapa').value;
-  const nombre = perfil.nombre || '';
-  const tel    = perfil.telefono || '';
-  const inmo   = perfil.inmobiliaria || '';
-
   const filtered = MSGS.filter(m => {
     if(cat   && m.categoria   !== cat)   return false;
     if(temp  && m.temperatura !== temp)  return false;
     if(etapa && m.etapa       !== etapa) return false;
-    if(q){
-      const hay = [m.situacion,m.frase_cliente,m.intencion_oculta,...(m.tags||[])].join(' ').toLowerCase();
-      if(!hay.includes(q)) return false;
-    }
+    if(q){ const hay=[m.situacion,m.frase_cliente,...(m.tags||[])].join(' ').toLowerCase(); if(!hay.includes(q)) return false; }
     return true;
   });
-
-  document.getElementById('mTotal').textContent = MSGS.length;
-  document.getElementById('mShown').textContent = filtered.length;
-  renderMsgs(filtered, nombre, tel, inmo);
+  renderMsgs(filtered);
 }
 
-function renderMsgs(list, nombre='', tel='', inmo=''){
-  const el = document.getElementById('msgResults');
+function renderMsgs(list){
+  const nombre = perfil.nombre || '';
+  const tel    = perfil.telefono || '';
+  const inmo   = perfil.inmobiliaria || '';
   document.getElementById('mTotal').textContent = MSGS.length;
   document.getElementById('mShown').textContent = list.length;
-
-  if(!list.length){
-    el.innerHTML = `<div class="msg-empty"><div class="msg-empty-icon">○</div><p>Sin resultados para esa búsqueda.</p></div>`;
-    return;
-  }
-
+  const el = document.getElementById('msgResults');
+  if(!list.length){ el.innerHTML=`<div class="msg-empty"><p>Sin resultados para esa búsqueda.</p></div>`; return; }
   el.innerHTML = list.map(m => {
-    const wa = inyectarDatos(m.respuesta_whatsapp, nombre, tel, inmo);
-    const campo = inyectarDatos(m.respuesta_campo, nombre, tel, inmo);
-    const noDecir = (m.no_decir||[]).map(x=>`<li>${x}</li>`).join('');
-    const vars = (m.variables||[]).map(v=>`<span style="font-size:9px;border:1px solid var(--w08);padding:4px 7px;border-radius:6px;color:var(--w35)">[${v}]</span>`).join('');
-    return `
-    <div class="msg-card">
+    const wa    = inyectar(m.respuesta_whatsapp, nombre, tel, inmo);
+    const campo = inyectar(m.respuesta_campo, nombre, tel, inmo);
+    const noD   = (m.no_decir||[]).map(x=>`<li style="padding:2px 0">✗ ${x}</li>`).join('');
+    return `<div class="msg-card">
       <div class="msg-head">
         <div>
           <div class="msg-id">${m.id}</div>
-          <div class="msg-situacion">${m.situacion}</div>
-          <div style="font-size:11px;color:var(--w35);font-style:italic;margin-top:4px">"${m.frase_cliente}"</div>
+          <div class="msg-sit">${m.situacion}</div>
+          <div class="msg-frase">"${m.frase_cliente}"</div>
         </div>
-        <div class="msg-badges">
+        <div class="badges">
           <span class="badge ${m.temperatura}">${m.temperatura}</span>
           <span class="badge">${m.etapa.replace(/_/g,' ')}</span>
           <span class="badge">${m.categoria}</span>
         </div>
       </div>
-      <div style="font-size:9px;color:var(--w35);margin-bottom:10px;font-style:italic;line-height:1.6;padding:8px 10px;background:rgba(0,0,0,.2);border-radius:8px">${m.intencion_oculta}</div>
+      <div class="msg-intent">${m.intencion_oculta}</div>
       <div class="msg-grid">
-        <div class="msg-box">
-          <h4>WhatsApp</h4>
-          <p class="msg-text">${wa}</p>
-          <div class="msg-actions">
-            <button class="btn primary" onclick="copiar(this,'${encodeURIComponent(wa)}')">Copiar WA</button>
-          </div>
+        <div class="msg-box"><h4>WhatsApp</h4><p class="msg-txt">${wa}</p>
+          <div class="msg-acts"><button class="btn primary" onclick="copiarTexto(this,\`${wa.replace(/`/g,"'")}\`)">Copiar WA</button></div>
         </div>
-        <div class="msg-box">
-          <h4>En campo</h4>
-          <p class="msg-text">${campo}</p>
-          <div class="msg-actions">
-            <button class="btn" onclick="copiar(this,'${encodeURIComponent(campo)}')">Copiar</button>
-          </div>
+        <div class="msg-box"><h4>En campo</h4><p class="msg-txt">${campo}</p>
+          <div class="msg-acts"><button class="btn" onclick="copiarTexto(this,\`${campo.replace(/`/g,"'")}\`)">Copiar</button></div>
         </div>
-        <div class="msg-box">
-          <h4>No decir</h4>
-          <ul style="list-style:none;padding:0">${noDecir}</ul>
-        </div>
-        <div class="msg-box">
-          <h4>Siguiente paso</h4>
-          <p>${m.siguiente_paso}</p>
-          ${vars ? `<div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:8px">${vars}</div>` : ''}
-        </div>
+        <div class="msg-box"><h4>No decir</h4><ul style="list-style:none;padding:0">${noD}</ul></div>
+        <div class="msg-box"><h4>Siguiente paso</h4><p>${m.siguiente_paso}</p></div>
       </div>
     </div>`;
   }).join('');
 }
 
-function inyectarDatos(texto, nombre, tel, inmo){
-  // Inyecta datos del asesor donde apliquen en el mensaje
-  return texto
-    .replace(/\[ASESOR\]/g, nombre || '[ASESOR]')
-    .replace(/\[TEL\]/g, tel || '[TEL]')
-    .replace(/\[INMOBILIARIA\]/g, inmo || '[INMOBILIARIA]');
+function inyectar(txt, nombre, tel, inmo){
+  return txt.replace(/\[ASESOR\]/g,nombre||'[ASESOR]').replace(/\[TEL\]/g,tel||'[TEL]').replace(/\[INMOBILIARIA\]/g,inmo||'[INMOBILIARIA]');
 }
 
-function copiar(btn, encoded){
-  const texto = decodeURIComponent(encoded);
-  navigator.clipboard.writeText(texto).then(()=>{
-    const orig = btn.textContent;
-    btn.textContent = '✓ Copiado';
-    setTimeout(()=>{ btn.textContent = orig; }, 1800);
-  });
+function copiarTexto(btn, txt){
+  navigator.clipboard.writeText(txt).then(()=>{ const o=btn.textContent; btn.textContent='✓ Copiado'; setTimeout(()=>btn.textContent=o,1800); });
 }
+
+/* ══ ADMIN: ASESORES ══ */
+async function cargarAsesores(){
+  const { data } = await sb.from('asesores').select('*').order('created_at');
+  todosAsesores = data || [];
+  const sel = document.getElementById('filtroAsesorLinks');
+  if(sel){ sel.innerHTML='<option value="">Todos los asesores</option>'+todosAsesores.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join(''); }
+  const nlSel = document.getElementById('nl-asesor');
+  if(nlSel){ nlSel.innerHTML='<option value="">Seleccionar asesor...</option>'+todosAsesores.map(a=>`<option value="${a.id}">${a.nombre}</option>`).join(''); }
+  const tbody = document.getElementById('tbodyAsesores');
+  if(!data?.length){ tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--w35);padding:20px">Sin asesores</td></tr>'; return; }
+  tbody.innerHTML = data.map(a => `
+    <tr>
+      <td style="font-weight:600;color:var(--w100)">${a.nombre}</td>
+      <td>${a.inmobiliaria||'—'}</td>
+      <td>${a.telefono||'—'}</td>
+      <td><span class="rol-pill ${a.rol}">${a.rol}</span></td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn ghost" onclick="editarAsesor('${a.id}')">Editar</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+async function crearAsesor(){
+  const id    = document.getElementById('na-id').value.trim();
+  const nombre= document.getElementById('na-nombre').value.trim();
+  const tel   = document.getElementById('na-tel').value.trim();
+  const wa    = document.getElementById('na-wa').value.trim();
+  const inmo  = document.getElementById('na-inmo').value.trim();
+  const rol   = document.getElementById('na-rol').value;
+  if(!id||!nombre){ showToast('UUID y nombre son obligatorios'); return; }
+  const { error } = await sb.from('asesores').insert({ id, nombre, telefono:tel, whatsapp:wa, inmobiliaria:inmo, rol });
+  if(error){ showToast('Error: '+error.message); return; }
+  cerrarModal('modalNuevoAsesor');
+  showToast('Asesor creado');
+  cargarAsesores();
+}
+
+function editarAsesor(id){
+  const a = todosAsesores.find(x=>x.id===id);
+  if(!a) return;
+  document.getElementById('na-id').value    = a.id;
+  document.getElementById('na-nombre').value= a.nombre;
+  document.getElementById('na-tel').value   = a.telefono||'';
+  document.getElementById('na-wa').value    = a.whatsapp||'';
+  document.getElementById('na-inmo').value  = a.inmobiliaria||'';
+  document.getElementById('na-rol').value   = a.rol||'asesor';
+  abrirModal('modalNuevoAsesor');
+}
+
+/* ══ ADMIN: LINKS ══ */
+async function cargarLinksAdmin(){
+  const filtro = document.getElementById('filtroAsesorLinks')?.value || '';
+  let q = sb.from('links_asesor').select('*, asesores(nombre)').order('created_at', {ascending:false});
+  if(filtro) q = q.eq('asesor_id', filtro);
+  const { data } = await q;
+  const tbody = document.getElementById('tbodyLinks');
+  if(!data?.length){ tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--w35);padding:20px">Sin links</td></tr>'; return; }
+  tbody.innerHTML = data.map(l => `
+    <tr>
+      <td style="color:var(--w100)">${l.asesores?.nombre||'—'}</td>
+      <td>${TIPO_LABEL[l.tipo]||l.tipo}</td>
+      <td style="font-weight:600;color:var(--w100)">${l.nombre}</td>
+      <td><a href="${l.url}" target="_blank" style="color:var(--gold);font-size:11px">${l.url.length>40?l.url.substring(0,40)+'…':l.url}</a></td>
+      <td><span class="status-dot ${l.activo?'dot-on':'dot-off'}"></span>${l.activo?'Activo':'Inactivo'}</td>
+      <td>
+        <div style="display:flex;gap:5px">
+          <button class="btn ${l.activo?'danger':'success'}" onclick="toggleLink('${l.id}',${l.activo})">${l.activo?'Desactivar':'Activar'}</button>
+          <button class="btn danger" onclick="borrarLink('${l.id}')">Borrar</button>
+        </div>
+      </td>
+    </tr>`).join('');
+}
+
+async function crearLink(){
+  const asesor = document.getElementById('nl-asesor').value;
+  const tipo   = document.getElementById('nl-tipo').value;
+  const nombre = document.getElementById('nl-nombre').value.trim();
+  const url    = document.getElementById('nl-url').value.trim();
+  if(!asesor||!nombre||!url){ showToast('Completa todos los campos'); return; }
+  const { error } = await sb.from('links_asesor').insert({ asesor_id:asesor, tipo, nombre, url });
+  if(error){ showToast('Error: '+error.message); return; }
+  cerrarModal('modalNuevoLink');
+  showToast('Link agregado');
+  cargarLinksAdmin();
+}
+
+async function toggleLink(id, activo){
+  await sb.from('links_asesor').update({ activo: !activo }).eq('id', id);
+  showToast(activo ? 'Link desactivado' : 'Link activado');
+  cargarLinksAdmin();
+}
+
+async function borrarLink(id){
+  if(!confirm('¿Borrar este link?')) return;
+  await sb.from('links_asesor').delete().eq('id', id);
+  showToast('Link borrado');
+  cargarLinksAdmin();
+}
+
+/* ══ MODALES ══ */
+function abrirModal(id){ document.getElementById(id).classList.remove('hidden'); }
+function cerrarModal(id){ document.getElementById(id).classList.add('hidden'); }
+function abrirModalNuevoAsesor(){
+  ['na-id','na-nombre','na-tel','na-wa','na-inmo'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('na-rol').value='asesor';
+  abrirModal('modalNuevoAsesor');
+}
+function abrirModalNuevoLink(){ abrirModal('modalNuevoLink'); }
 
 /* ══ TOAST ══ */
-function showToast(msg){
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 1800);
-}
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
 
-/* ══ INIT ══ */
-buildNav();
+/* ══ START ══ */
 checkSession();
 </script>
 </body>
