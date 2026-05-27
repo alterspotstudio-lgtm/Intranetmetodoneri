@@ -1,371 +1,794 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="theme-color" content="#0A0A0A" />
-<title>Centro de Comando NERI · Supabase</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#0A0A0A"/>
+<title>NERI · Sistema Operativo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --black:#0A0A0A;--black2:#111;--black3:#181818;--gold:#C6A86B;--gold2:#E2C98A;
-  --goldDim:rgba(198,168,107,.10);--goldBorder:rgba(198,168,107,.22);
-  --white:#fff;--w60:rgba(255,255,255,.60);--w35:rgba(255,255,255,.35);
-  --w18:rgba(255,255,255,.18);--w08:rgba(255,255,255,.08);--w04:rgba(255,255,255,.04);
-  --display:'Bebas Neue',sans-serif;--body:'Montserrat',sans-serif;--editorial:'Cormorant Garamond',serif;
+  --black:#0A0A0A;
+  --black2:#111111;
+  --black3:#181818;
+  --gold:#C6A86B;
+  --gold2:#E2C98A;
+  --goldDim:rgba(198,168,107,.10);
+  --goldBorder:rgba(198,168,107,.22);
+  --goldGlow:rgba(198,168,107,.06);
+  --w100:rgba(255,255,255,1);
+  --w60:rgba(255,255,255,.60);
+  --w35:rgba(255,255,255,.35);
+  --w18:rgba(255,255,255,.18);
+  --w08:rgba(255,255,255,.08);
+  --w04:rgba(255,255,255,.04);
+  --display:'Bebas Neue',sans-serif;
+  --body:'Montserrat',sans-serif;
+  --ed:'Cormorant Garamond',serif;
+  --sidebar:260px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{min-height:100%;background:var(--black);color:var(--white);font-family:var(--body)}
-body{background:
-  radial-gradient(circle at 10% -10%,rgba(198,168,107,.13),transparent 28%),
-  radial-gradient(circle at 100% 20%,rgba(198,168,107,.06),transparent 22%),
-  var(--black);
+html,body{min-height:100%;background:var(--black);color:var(--w100);font-family:var(--body)}
+body{
+  background:
+    radial-gradient(ellipse 60% 40% at 8% -5%, rgba(198,168,107,.11) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 30% at 92% 10%, rgba(198,168,107,.05) 0%, transparent 55%),
+    var(--black);
 }
 a{color:inherit;text-decoration:none}
-button,input,textarea{font-family:var(--body)}
+button,input,textarea,select{font-family:var(--body)}
 .hidden{display:none!important}
 
-/* LOGIN */
-.login{position:fixed;inset:0;z-index:999;background:radial-gradient(circle at 30% 0%,rgba(198,168,107,.13),transparent 32%),#050505;display:flex;align-items:center;justify-content:center;padding:22px}
-.login-card{width:min(460px,100%);border:1px solid var(--goldBorder);background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.015));padding:34px;border-radius:22px;box-shadow:0 40px 120px rgba(0,0,0,.5)}
-.eyebrow{font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:12px}
-.login-title{font-family:var(--display);font-size:54px;letter-spacing:3px;line-height:.9;margin-bottom:14px}
-.login-copy{font-size:13px;line-height:1.8;color:var(--w35);margin-bottom:22px}
-.login input{width:100%;padding:15px 16px;background:#050505;border:1px solid var(--w08);border-radius:12px;color:white;margin-bottom:10px;outline:none}
-.login input:focus{border-color:var(--goldBorder)}
-.login-btn{width:100%;background:var(--gold);color:#080808;border:none;border-radius:12px;padding:15px;font-size:10px;letter-spacing:3px;text-transform:uppercase;font-weight:800;cursor:pointer;margin-top:6px}
-.login-note{font-size:10px;color:var(--w18);line-height:1.7;margin-top:14px}
-.login-error{font-size:11px;color:#ff8a8a;min-height:16px;margin-top:10px;line-height:1.5}
+/* ── NOISE TEXTURE ── */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity:.4;
+}
 
-/* LAYOUT */
-.app{min-height:100vh;display:grid;grid-template-columns:300px 1fr}
-.sidebar{border-right:1px solid var(--w08);background:rgba(10,10,10,.92);backdrop-filter:blur(18px);height:100vh;position:sticky;top:0;padding:28px 20px;display:flex;flex-direction:column}
-.brand{font-family:var(--display);font-size:30px;letter-spacing:6px;color:var(--gold);line-height:1}
-.brand-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--w35);font-weight:700;margin-top:8px;line-height:1.6}
-.brand-line{width:44px;height:1px;background:var(--gold);margin:18px 0 22px;opacity:.75}
-.nav{display:flex;flex-direction:column;gap:6px}
-.nav-btn{background:transparent;border:1px solid transparent;color:var(--w35);display:flex;align-items:center;gap:12px;padding:13px 12px;border-radius:14px;cursor:pointer;text-align:left;transition:.18s}
+/* ── LOGIN ── */
+.login{
+  position:fixed;inset:0;z-index:999;
+  background:
+    radial-gradient(ellipse 50% 60% at 20% -10%, rgba(198,168,107,.13) 0%, transparent 55%),
+    #050505;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+}
+.login-card{
+  width:min(440px,100%);
+  border:1px solid var(--goldBorder);
+  background:linear-gradient(160deg,rgba(255,255,255,.055) 0%,rgba(255,255,255,.018) 100%);
+  padding:40px 36px;
+  border-radius:24px;
+  box-shadow:0 60px 140px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.03) inset;
+  animation:loginIn .5s cubic-bezier(.22,1,.36,1);
+}
+@keyframes loginIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.login-eyebrow{
+  font-size:8px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+}
+.login-eyebrow::after{
+  content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--goldBorder),transparent);
+}
+.login-title{
+  font-family:var(--display);font-size:62px;
+  letter-spacing:4px;line-height:.88;
+  margin-bottom:6px;color:var(--w100);
+}
+.login-title em{color:var(--gold)}
+.login-sub{
+  font-family:var(--ed);font-style:italic;
+  font-size:17px;color:var(--w35);
+  line-height:1.55;margin-bottom:32px;
+}
+.login-field{position:relative;margin-bottom:12px}
+.login-field input{
+  width:100%;padding:16px 18px;
+  background:rgba(5,5,5,.9);
+  border:1px solid var(--w08);
+  border-radius:14px;color:var(--w100);
+  font-size:13px;font-weight:400;
+  outline:none;transition:border-color .2s;
+}
+.login-field input::placeholder{color:var(--w18)}
+.login-field input:focus{border-color:var(--goldBorder)}
+.login-btn{
+  width:100%;
+  background:var(--gold);
+  color:#060606;border:none;
+  border-radius:14px;padding:16px;
+  font-size:9px;letter-spacing:4px;
+  text-transform:uppercase;font-weight:800;
+  cursor:pointer;margin-top:8px;
+  transition:background .18s,transform .12s;
+}
+.login-btn:hover{background:var(--gold2)}
+.login-btn:active{transform:scale(.98)}
+.login-error{
+  font-size:11px;color:#ff8888;
+  min-height:18px;margin-top:12px;line-height:1.5;
+}
+.login-note{
+  font-size:10px;color:var(--w18);
+  line-height:1.8;margin-top:16px;
+  border-top:1px solid var(--w04);padding-top:14px;
+}
+
+/* ── APP LAYOUT ── */
+.app{min-height:100vh;display:grid;grid-template-columns:var(--sidebar) 1fr;position:relative;z-index:1}
+
+/* ── SIDEBAR ── */
+.sidebar{
+  border-right:1px solid var(--w08);
+  background:rgba(8,8,8,.96);
+  backdrop-filter:blur(20px);
+  height:100vh;position:sticky;top:0;
+  padding:28px 18px;
+  display:flex;flex-direction:column;
+  overflow:hidden;
+}
+.sidebar::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:180px;
+  background:radial-gradient(ellipse 100% 100% at 50% 0%, rgba(198,168,107,.08) 0%, transparent 100%);
+  pointer-events:none;
+}
+.brand{
+  font-family:var(--display);font-size:34px;
+  letter-spacing:8px;color:var(--gold);
+  line-height:1;position:relative;
+}
+.brand-sub{
+  font-size:8px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--w18);font-weight:600;margin-top:6px;line-height:1.8;
+}
+.brand-line{
+  width:100%;height:1px;
+  background:linear-gradient(90deg,var(--goldBorder),transparent);
+  margin:22px 0;opacity:.7;
+}
+.nav{display:flex;flex-direction:column;gap:3px}
+.nav-btn{
+  background:transparent;border:1px solid transparent;
+  color:var(--w35);
+  display:flex;align-items:center;gap:11px;
+  padding:11px 12px;border-radius:12px;
+  cursor:pointer;text-align:left;
+  transition:all .18s;width:100%;
+}
 .nav-btn:hover{background:var(--w04);color:var(--w60)}
-.nav-btn.active{background:var(--goldDim);border-color:var(--goldBorder);color:white}
-.nav-n{font-family:var(--display);font-size:22px;color:var(--gold);min-width:25px}
-.nav-t{font-size:10px;letter-spacing:2px;text-transform:uppercase;font-weight:800;line-height:1.25}
-.nav-s{font-size:9px;letter-spacing:.3px;text-transform:none;color:var(--w35);font-weight:400;margin-top:2px}
-.side-bottom{margin-top:auto;border-top:1px solid var(--w08);padding-top:18px}
-.status{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--w35);line-height:1.8}
-.status b{color:var(--gold)}
-.main{min-width:0}
-.topbar{height:62px;border-bottom:1px solid var(--w08);display:flex;align-items:center;justify-content:space-between;padding:0 30px;background:rgba(10,10,10,.72);backdrop-filter:blur(12px);position:sticky;top:0;z-index:20}
-.top-title{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800}
-.top-actions{display:flex;align-items:center;gap:10px}
-.pill{border:1px solid var(--w08);background:var(--w04);color:var(--w35);padding:9px 12px;border-radius:999px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:700}
-.logout{border:1px solid var(--goldBorder);background:var(--goldDim);color:var(--gold);padding:9px 12px;border-radius:999px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:800;cursor:pointer}
-.content{padding:42px 34px 72px;max-width:1240px}
-.panel{display:none;animation:fade .28s ease}
-.panel.active{display:block}
-@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.hero{margin-bottom:30px}
-.hero-kicker{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:14px}
-.hero-title{font-family:var(--display);font-size:clamp(48px,7vw,94px);letter-spacing:4px;line-height:.88;margin-bottom:14px}
-.hero-title span{color:var(--gold)}
-.hero-copy{font-family:var(--editorial);font-size:25px;font-style:italic;color:var(--w60);line-height:1.38;max-width:760px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.card{border:1px solid var(--w08);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border-radius:22px;padding:22px;min-height:160px}
-.card:hover{border-color:var(--goldBorder)}
-.card-k{font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:800;margin-bottom:10px}
-.card-title{font-family:var(--display);font-size:32px;letter-spacing:2px;line-height:1}
-.card-text{font-size:12px;line-height:1.75;color:var(--w35);font-weight:300;margin-top:10px}
-.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.btn{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--goldBorder);background:var(--goldDim);color:var(--gold);padding:11px 13px;border-radius:11px;font-size:9px;letter-spacing:2px;text-transform:uppercase;font-weight:800;cursor:pointer}
-.btn.primary{background:var(--gold);color:#080808;border-color:var(--gold)}
-.btn.ghost{background:transparent;color:var(--w35);border-color:var(--w08)}
-.btn.danger{border-color:rgba(255,120,120,.3);color:#ff9b9b;background:rgba(255,90,90,.06)}
-.btn[disabled]{opacity:.4;cursor:not-allowed}
-.stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
-.stat{border:1px solid var(--w08);border-radius:18px;background:rgba(0,0,0,.18);padding:16px}
-.stat b{font-family:var(--display);font-size:36px;color:var(--gold);letter-spacing:2px}
-.stat span{display:block;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--w35)}
-.crm-box,.notice{border:1px solid var(--goldBorder);background:rgba(198,168,107,.035);border-radius:22px;padding:22px;margin-bottom:18px}
-.crm-edit{width:100%;min-height:90px;background:#050505;border:1px solid var(--w08);color:white;border-radius:14px;padding:14px;outline:none;font-size:12px;line-height:1.6}
-.crm-frame{width:100%;height:640px;border:1px solid var(--w08);border-radius:18px;background:#060606;margin-top:16px}
-.small{font-size:11px;color:var(--w35);line-height:1.7}
-.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#050505;border:1px solid var(--w08);padding:2px 6px;border-radius:6px;color:#e9d39f}
-.checklist{display:grid;gap:10px}
-.item{display:flex;gap:12px;border:1px solid var(--w08);border-radius:16px;padding:14px;background:rgba(0,0,0,.16)}
-.dot{width:7px;height:7px;background:var(--gold);border-radius:50%;margin-top:7px;box-shadow:0 0 10px rgba(198,168,107,.6)}
-.item h4{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:white;margin-bottom:4px}
-.item p{font-size:12px;line-height:1.65;color:var(--w35);font-weight:300}
-.mobile-menu{display:none}
-.toast{position:fixed;right:22px;bottom:22px;background:var(--gold);color:#080808;border-radius:12px;padding:13px 15px;font-size:12px;font-weight:800;opacity:0;transform:translateY(10px);transition:.2s;z-index:3000}
-.toast.show{opacity:1;transform:translateY(0)}
-.config-warning{color:#ffb78f;font-size:12px;line-height:1.7;border:1px solid rgba(255,183,143,.18);background:rgba(255,183,143,.06);border-radius:14px;padding:12px;margin-top:12px}
+.nav-btn.active{
+  background:linear-gradient(135deg,rgba(198,168,107,.12),rgba(198,168,107,.04));
+  border-color:var(--goldBorder);color:var(--w100);
+}
+.nav-num{
+  font-family:var(--display);font-size:19px;
+  color:var(--gold);min-width:24px;opacity:.6;
+  transition:opacity .18s;
+}
+.nav-btn.active .nav-num{opacity:1}
+.nav-label{flex:1}
+.nav-t{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;font-weight:800;line-height:1}
+.nav-s{font-size:9px;letter-spacing:.3px;color:var(--w35);font-weight:400;margin-top:3px}
+.nav-btn.active .nav-s{color:var(--w60)}
+.nav-dot{
+  width:5px;height:5px;border-radius:50%;
+  background:var(--gold);opacity:0;
+  transition:opacity .18s;flex-shrink:0;
+}
+.nav-btn.active .nav-dot{opacity:1}
+.sidebar-bottom{
+  margin-top:auto;
+  border-top:1px solid var(--w04);
+  padding-top:18px;
+}
+.sidebar-session{
+  font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--w18);line-height:2;
+}
+.sidebar-session b{color:var(--gold);font-weight:700}
+.sidebar-logout{
+  margin-top:12px;width:100%;
+  background:transparent;
+  border:1px solid var(--w08);
+  color:var(--w35);padding:10px;
+  border-radius:10px;font-size:8px;
+  letter-spacing:3px;text-transform:uppercase;
+  font-weight:800;cursor:pointer;
+  transition:all .18s;
+}
+.sidebar-logout:hover{border-color:var(--goldBorder);color:var(--gold)}
 
-@media(max-width:980px){
+/* ── MAIN ── */
+.main{min-width:0;display:flex;flex-direction:column}
+.topbar{
+  height:58px;
+  border-bottom:1px solid var(--w08);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;
+  background:rgba(8,8,8,.88);
+  backdrop-filter:blur(14px);
+  position:sticky;top:0;z-index:20;
+}
+.top-section{
+  font-size:8px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;
+}
+.top-right{display:flex;align-items:center;gap:10px}
+.top-user{
+  font-size:9px;letter-spacing:1.5px;
+  color:var(--w35);
+  border:1px solid var(--w08);
+  padding:8px 14px;border-radius:999px;
+}
+.top-logout{
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  border:1px solid var(--goldBorder);
+  background:var(--goldDim);color:var(--gold);
+  padding:8px 14px;border-radius:999px;
+  cursor:pointer;font-weight:800;
+}
+
+/* ── MOBILE NAV ── */
+.mobile-nav{
+  display:none;
+  gap:6px;overflow-x:auto;padding:10px 16px;
+  border-bottom:1px solid var(--w08);
+  position:sticky;top:58px;background:var(--black);z-index:19;
+  scrollbar-width:none;
+}
+.mobile-nav::-webkit-scrollbar{display:none}
+
+/* ── CONTENT ── */
+.content{padding:48px 36px 80px;max-width:1200px;width:100%}
+.panel{display:none;animation:panelIn .3s cubic-bezier(.22,1,.36,1)}
+.panel.active{display:block}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── PAGE HERO ── */
+.page-hero{margin-bottom:48px}
+.page-kicker{
+  font-size:8px;letter-spacing:5px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:16px;
+  display:flex;align-items:center;gap:12px;
+}
+.page-kicker::after{
+  content:'';height:1px;width:48px;
+  background:linear-gradient(90deg,var(--goldBorder),transparent);
+}
+.page-title{
+  font-family:var(--display);
+  font-size:clamp(52px,7vw,100px);
+  letter-spacing:4px;line-height:.86;
+  margin-bottom:16px;
+}
+.page-title em{color:var(--gold);font-style:normal}
+.page-quote{
+  font-family:var(--ed);font-style:italic;
+  font-size:clamp(18px,2.2vw,26px);
+  color:var(--w60);line-height:1.45;
+  max-width:680px;
+}
+
+/* ── STAT ROW ── */
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;margin-bottom:24px;
+}
+.stat{
+  border:1px solid var(--w08);
+  border-radius:16px;
+  background:rgba(0,0,0,.2);
+  padding:18px;
+  transition:border-color .2s;
+}
+.stat:hover{border-color:var(--goldBorder)}
+.stat-n{
+  font-family:var(--display);font-size:42px;
+  color:var(--gold);letter-spacing:2px;line-height:1;
+}
+.stat-l{
+  font-size:8px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--w35);margin-top:8px;font-weight:600;
+}
+
+/* ── GRID ── */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* ── CARD ── */
+.card{
+  border:1px solid var(--w08);
+  background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.012));
+  border-radius:20px;padding:24px;
+  transition:border-color .2s;
+}
+.card:hover{border-color:var(--goldBorder)}
+.card-kicker{
+  font-size:7px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:12px;
+}
+.card-title{
+  font-family:var(--display);font-size:28px;
+  letter-spacing:2px;line-height:1;margin-bottom:10px;
+}
+.card-body{
+  font-size:12px;line-height:1.8;
+  color:var(--w35);font-weight:300;
+}
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+
+/* ── BUTTONS ── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  border:1px solid var(--goldBorder);
+  background:var(--goldDim);color:var(--gold);
+  padding:11px 16px;border-radius:10px;
+  font-size:8px;letter-spacing:2.5px;
+  text-transform:uppercase;font-weight:800;
+  cursor:pointer;transition:all .18s;
+  white-space:nowrap;
+}
+.btn:hover{background:rgba(198,168,107,.18);border-color:var(--gold2)}
+.btn.primary{background:var(--gold);color:#060606;border-color:var(--gold)}
+.btn.primary:hover{background:var(--gold2)}
+.btn.ghost{
+  background:transparent;color:var(--w35);
+  border-color:var(--w08);
+}
+.btn.ghost:hover{border-color:var(--w18);color:var(--w60)}
+.btn[disabled]{opacity:.3;cursor:not-allowed;pointer-events:none}
+
+/* ── BIBLIOTECA ── */
+.library-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.lib-card{
+  border:1px solid var(--w08);
+  background:linear-gradient(160deg,rgba(255,255,255,.04),rgba(255,255,255,.012));
+  border-radius:20px;padding:22px;
+  transition:border-color .2s;
+  display:flex;flex-direction:column;
+}
+.lib-card:hover{border-color:var(--goldBorder)}
+.lib-kicker{
+  font-size:7px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:10px;
+}
+.lib-title{
+  font-family:var(--display);font-size:24px;
+  letter-spacing:1.5px;line-height:1;margin-bottom:10px;
+}
+.lib-desc{
+  font-size:11px;line-height:1.75;color:var(--w35);
+  font-weight:300;flex:1;
+}
+.lib-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:16px}
+
+/* ── CRM ── */
+.crm-input-block{
+  border:1px solid var(--goldBorder);
+  background:rgba(198,168,107,.03);
+  border-radius:20px;padding:24px;margin-bottom:18px;
+}
+.crm-input-label{
+  font-size:8px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);font-weight:800;margin-bottom:10px;
+}
+.crm-textarea{
+  width:100%;min-height:72px;
+  background:#050505;border:1px solid var(--w08);
+  color:var(--w60);border-radius:12px;
+  padding:14px;outline:none;
+  font-size:12px;line-height:1.6;
+  resize:vertical;
+}
+.crm-textarea:focus{border-color:var(--goldBorder)}
+.crm-frame{
+  width:100%;height:640px;
+  border:1px solid var(--w08);
+  border-radius:18px;background:#060606;
+  margin-top:16px;
+}
+
+/* ── PROTOCOLO (CHECKLIST) ── */
+.protocol-list{display:grid;gap:10px}
+.protocol-item{
+  display:flex;gap:16px;align-items:flex-start;
+  border:1px solid var(--w08);
+  border-radius:16px;padding:18px;
+  background:rgba(0,0,0,.14);
+  transition:border-color .2s;
+}
+.protocol-item:hover{border-color:var(--goldBorder)}
+.protocol-num{
+  font-family:var(--display);font-size:28px;
+  color:var(--gold);line-height:1;opacity:.55;
+  flex-shrink:0;min-width:34px;
+}
+.protocol-body h4{
+  font-size:10px;letter-spacing:2.5px;
+  text-transform:uppercase;font-weight:800;
+  color:var(--w100);margin-bottom:6px;
+}
+.protocol-body p{
+  font-size:12px;line-height:1.7;
+  color:var(--w35);font-weight:300;
+}
+
+/* ── AVISO / NOTICE ── */
+.notice{
+  border:1px solid var(--goldBorder);
+  background:rgba(198,168,107,.03);
+  border-radius:16px;padding:18px 22px;
+  margin-bottom:20px;
+  font-size:12px;line-height:1.7;
+  color:var(--w60);
+}
+.notice b{color:var(--gold);font-weight:700}
+
+/* ── CODE ── */
+.code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:#050505;border:1px solid var(--w08);
+  padding:2px 7px;border-radius:6px;
+  color:#e9d39f;font-size:11px;
+}
+.code-block{
+  background:#050505;border:1px solid var(--w08);
+  border-radius:14px;padding:18px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11px;line-height:1.8;color:#c6a86b;
+  overflow-x:auto;margin-top:12px;
+}
+
+/* ── SECTION DIVIDER ── */
+.section-div{
+  height:1px;
+  background:linear-gradient(90deg,var(--w08),transparent);
+  margin:36px 0;
+}
+
+/* ── TOAST ── */
+.toast{
+  position:fixed;right:24px;bottom:24px;
+  background:var(--gold);color:#060606;
+  border-radius:12px;padding:13px 18px;
+  font-size:11px;font-weight:800;letter-spacing:1px;
+  opacity:0;transform:translateY(12px);
+  transition:.22s cubic-bezier(.22,1,.36,1);
+  z-index:3000;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:960px){
   .app{grid-template-columns:1fr}
   .sidebar{display:none}
-  .mobile-menu{display:flex;gap:8px;overflow-x:auto;padding:12px 16px;border-bottom:1px solid var(--w08);position:sticky;top:62px;background:#0A0A0A;z-index:19}
-  .mobile-menu .nav-btn{min-width:190px}
+  .mobile-nav{display:flex}
   .content{padding:28px 18px 60px}
-  .grid,.grid2,.stat-row{grid-template-columns:1fr}
+  .grid3,.grid2,.stats{grid-template-columns:1fr}
+  .library-grid{grid-template-columns:1fr}
   .topbar{padding:0 16px}
-  .pill{display:none}
+  .top-user{display:none}
 }
 </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div class="login" id="login">
   <div class="login-card">
-    <div class="eyebrow">Acceso con Supabase</div>
-    <div class="login-title">CENTRO DE<br>COMANDO</div>
-    <p class="login-copy">Acceso privado por correo y contraseña. Las plantillas no viven públicas en Vercel; se descargan desde Supabase Storage privado.</p>
-    <input id="email" placeholder="Correo autorizado" type="email" autocomplete="username">
-    <input id="password" placeholder="Contraseña" type="password" autocomplete="current-password">
-    <button class="login-btn" onclick="signIn()">Entrar</button>
+    <div class="login-eyebrow">Sistema operativo privado</div>
+    <div class="login-title">MÉTODO<br><em>NERI</em></div>
+    <p class="login-sub">Acceso restringido a asesores autorizados.</p>
+    <div class="login-field">
+      <input id="loginEmail" type="email" placeholder="Correo autorizado" autocomplete="username"/>
+    </div>
+    <div class="login-field">
+      <input id="loginPass" type="password" placeholder="Contraseña" autocomplete="current-password"/>
+    </div>
+    <button class="login-btn" onclick="signIn()">Acceder al sistema</button>
     <div class="login-error" id="loginError"></div>
-    <p class="login-note">Crea primero los usuarios en Supabase Authentication. Después pega tu URL y Anon Key en el bloque CONFIG.</p>
+    <p class="login-note">Este panel no es público. Si no tienes acceso, comunícate con la dirección.</p>
   </div>
 </div>
 
+<!-- APP -->
 <div class="app hidden" id="app">
+
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <div class="brand">NERI</div>
-    <div class="brand-sub">Centro de Comando<br>Acceso Seguro</div>
+    <div class="brand-sub">Sistema operativo<br>Versión 2.0</div>
     <div class="brand-line"></div>
-    <div class="nav" id="sideNav"></div>
-    <div class="side-bottom">
-      <div class="status">Login: <b>Supabase</b><br>Storage: <b>Privado</b><br>Versión: v1</div>
+    <nav class="nav" id="sideNav"></nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-session">
+        Sesión: <b id="sessionUser">—</b><br>
+        Acceso: <b>Autorizado</b>
+      </div>
+      <button class="sidebar-logout" onclick="signOut()">Cerrar sesión</button>
     </div>
   </aside>
 
+  <!-- MAIN -->
   <main class="main">
     <div class="topbar">
-      <div class="top-title" id="topTitle">Dashboard</div>
-      <div class="top-actions">
-        <div class="pill" id="userEmail">Usuario autorizado</div>
-        <button class="logout" onclick="signOut()">Salir</button>
+      <div class="top-section" id="topSection">Dashboard</div>
+      <div class="top-right">
+        <div class="top-user" id="topUser">—</div>
+        <button class="top-logout" onclick="signOut()">Salir</button>
       </div>
     </div>
-    <div class="mobile-menu" id="mobileNav"></div>
+    <nav class="mobile-nav" id="mobileNav"></nav>
 
     <div class="content">
-      <section class="panel active" id="dashboard">
-        <div class="hero">
-          <div class="hero-kicker">Sistema operativo inmobiliario privado</div>
-          <h1 class="hero-title">CENTRO DE<br><span>COMANDO</span></h1>
-          <p class="hero-copy">El código público muestra el panel. Las plantillas viven privadas y solo se entregan con sesión autorizada.</p>
+
+      <!-- DASHBOARD -->
+      <section class="panel active" id="p-dashboard">
+        <div class="page-hero">
+          <div class="page-kicker">Sistema operativo inmobiliario</div>
+          <h1 class="page-title">SISTEMA<br><em>NERI</em></h1>
+          <p class="page-quote">El lead es consecuencia de una gestión de calidad.</p>
         </div>
+
         <div id="configAlert"></div>
-        <div class="stat-row">
-          <div class="stat"><b>01</b><span>Login real</span></div>
-          <div class="stat"><b>08</b><span>Archivos privados</span></div>
-          <div class="stat"><b>01</b><span>CRM Airtable</span></div>
-          <div class="stat"><b>∞</b><span>Escalable</span></div>
+
+        <div class="stats">
+          <div class="stat"><div class="stat-n">01</div><div class="stat-l">Sesión activa</div></div>
+          <div class="stat"><div class="stat-n" id="statFiles">08</div><div class="stat-l">Archivos en sistema</div></div>
+          <div class="stat"><div class="stat-n">01</div><div class="stat-l">CRM operativo</div></div>
+          <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Escalable</div></div>
         </div>
-        <div class="grid">
-          <div class="card"><div class="card-k">Seguridad</div><div class="card-title">Supabase Auth</div><p class="card-text">Correo y contraseña por asesor. Sesión real, cierre de sesión y bloqueo sin acceso.</p></div>
-          <div class="card"><div class="card-k">Archivos</div><div class="card-title">Storage privado</div><p class="card-text">Los HTMLs ya no van pegados dentro del proyecto público de Vercel.</p></div>
-          <div class="card"><div class="card-k">CRM</div><div class="card-title">Airtable</div><p class="card-text">Se mantiene embebido para pruebas y después puede migrarse a panel propio.</p></div>
+
+        <div class="section-div"></div>
+
+        <div class="grid3">
+          <div class="card">
+            <div class="card-kicker">Acceso</div>
+            <div class="card-title">SESIÓN REAL</div>
+            <p class="card-body">Correo y contraseña por asesor. Nadie ve lo que no le corresponde.</p>
+          </div>
+          <div class="card">
+            <div class="card-kicker">Plantillas</div>
+            <div class="card-title">PRIVADAS</div>
+            <p class="card-body">Las fórmulas no son públicas. Se generan URLs firmadas de acceso temporal por sesión autorizada.</p>
+          </div>
+          <div class="card">
+            <div class="card-kicker">Operaciones</div>
+            <div class="card-title">CRM ACTIVO</div>
+            <p class="card-body">Todos los leads, expedientes y seguimientos en un solo lugar.</p>
+          </div>
         </div>
       </section>
 
-      <section class="panel" id="biblioteca">
-        <div class="hero">
-          <div class="hero-kicker">Biblioteca privada</div>
-          <h1 class="hero-title">PLANTILLAS<br><span>PROTEGIDAS</span></h1>
-          <p class="hero-copy">Cada botón genera una URL firmada temporal desde Supabase Storage.</p>
+      <!-- BIBLIOTECA -->
+      <section class="panel" id="p-biblioteca">
+        <div class="page-hero">
+          <div class="page-kicker">Archivos protegidos</div>
+          <h1 class="page-title">BIBLIO<em>TECA</em></h1>
+          <p class="page-quote">Cada plantilla se abre desde tu sesión. Nada es descargable sin autenticación.</p>
         </div>
-        <div class="notice">
-          <div class="card-k">Importante</div>
-          <p class="small">Sube estos archivos al bucket privado <span class="code">plantillas-neri</span>. Si una descarga falla, revisa que el nombre en Supabase sea idéntico al configurado.</p>
-        </div>
-        <div class="grid" id="libraryGrid"></div>
+        <div class="library-grid" id="libraryGrid"></div>
       </section>
 
-      <section class="panel" id="crm">
-        <div class="hero">
-          <div class="hero-kicker">Base · Método NERI · OPERACIONES NERI</div>
-          <h1 class="hero-title">CRM<br><span>AIRTABLE</span></h1>
-          <p class="hero-copy">Primera versión: vista embebida. Segunda versión: panel propio conectado por Make/API.</p>
+      <!-- CRM -->
+      <section class="panel" id="p-crm">
+        <div class="page-hero">
+          <div class="page-kicker">Operaciones · Leads · Seguimiento</div>
+          <h1 class="page-title">CRM<br><em>AIRTABLE</em></h1>
+          <p class="page-quote">Primera versión embebida. La vista directa de todas las operaciones activas.</p>
         </div>
-        <div class="crm-box">
-          <div class="card-k">Zona editable</div>
-          <p class="small">Pega aquí el enlace de “Embed this view” de Airtable. Debe empezar normalmente con <span class="code">https://airtable.com/embed/...</span></p>
-          <textarea class="crm-edit" id="airtableUrl" placeholder="Pega aquí tu URL embed de Airtable"></textarea>
-          <div class="card-actions">
-            <button class="btn primary" onclick="saveAirtable()">Guardar vista CRM</button>
+        <div class="crm-input-block">
+          <div class="crm-input-label">URL embed de Airtable</div>
+          <textarea class="crm-textarea" id="airtableUrl" placeholder="https://airtable.com/embed/..."></textarea>
+          <div class="card-actions" style="margin-top:14px">
+            <button class="btn primary" onclick="saveAirtable()">Guardar vista</button>
             <button class="btn ghost" onclick="clearAirtable()">Limpiar</button>
           </div>
-          <iframe class="crm-frame" id="crmFrame" title="CRM Airtable"></iframe>
+        </div>
+        <iframe class="crm-frame" id="crmFrame" title="CRM Airtable"></iframe>
+      </section>
+
+      <!-- PROTOCOLO -->
+      <section class="panel" id="p-protocolo">
+        <div class="page-hero">
+          <div class="page-kicker">Ejecución operativa</div>
+          <h1 class="page-title">PROTO<em>COLO</em></h1>
+          <p class="page-quote">Lo que debe hacer el asesor antes de activar cualquier experiencia del sistema.</p>
+        </div>
+        <div class="protocol-list">
+          <div class="protocol-item">
+            <div class="protocol-num">01</div>
+            <div class="protocol-body">
+              <h4>Descargar desde biblioteca privada</h4>
+              <p>El asesor no recibe carpeta ni acceso directo. Descarga lo que necesita desde su sesión activa.</p>
+            </div>
+          </div>
+          <div class="protocol-item">
+            <div class="protocol-num">02</div>
+            <div class="protocol-body">
+              <h4>Duplicar la plantilla aprobada</h4>
+              <p>Nunca se trabaja sobre el archivo maestro. Siempre sobre una copia renombrada con la propiedad activa.</p>
+            </div>
+          </div>
+          <div class="protocol-item">
+            <div class="protocol-num">03</div>
+            <div class="protocol-body">
+              <h4>Editar solo la zona autorizada</h4>
+              <p>Propiedad, asesor, WhatsApp, ficha técnica, webhook, pixel y datos de mercado. Nada más.</p>
+            </div>
+          </div>
+          <div class="protocol-item">
+            <div class="protocol-num">04</div>
+            <div class="protocol-body">
+              <h4>Probar conexión antes de publicar</h4>
+              <p>Enviar prueba real y confirmar llegada a Make y Airtable. Si no llega: no se publica.</p>
+            </div>
+          </div>
+          <div class="protocol-item">
+            <div class="protocol-num">05</div>
+            <div class="protocol-body">
+              <h4>Registrar en CRM</h4>
+              <p>Toda operación activa debe estar en Airtable desde el primer día. Sin excepción.</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section class="panel" id="operacion">
-        <div class="hero">
-          <div class="hero-kicker">Orden de trabajo</div>
-          <h1 class="hero-title">PROTOCOLO<br><span>OPERATIVO</span></h1>
-          <p class="hero-copy">Lo que debe hacer el asesor antes de publicar, enviar o activar cualquier experiencia.</p>
-        </div>
-        <div class="checklist">
-          <div class="item"><div class="dot"></div><div><h4>01 · Descargar desde biblioteca privada</h4><p>El asesor no recibe carpeta completa. Descarga lo que necesita desde su sesión.</p></div></div>
-          <div class="item"><div class="dot"></div><div><h4>02 · Duplicar plantilla aprobada</h4><p>Nunca trabajar sobre el archivo maestro sin respaldo.</p></div></div>
-          <div class="item"><div class="dot"></div><div><h4>03 · Editar solo zona autorizada</h4><p>Propiedad, asesor, WhatsApp, ficha, webhook, pixel y datos de mercado.</p></div></div>
-          <div class="item"><div class="dot"></div><div><h4>04 · Probar conexión</h4><p>Enviar prueba real y confirmar llegada a Make/Airtable.</p></div></div>
-        </div>
-      </section>
-
-      <section class="panel" id="manuales">
-        <div class="hero">
-          <div class="hero-kicker">Manual y configuración</div>
-          <h1 class="hero-title">INSTALACIÓN<br><span>SEGURA</span></h1>
-          <p class="hero-copy">Aquí están los pasos para crear Supabase, subir archivos y publicar en Vercel.</p>
-        </div>
-        <div class="grid2">
-          <div class="card"><div class="card-k">Manual</div><div class="card-title">HTML</div><p class="card-text">Manual completo de configuración Supabase + Vercel.</p><div class="card-actions"><a class="btn primary" href="MANUAL_SUPABASE_NERI.html" target="_blank">Abrir manual</a></div></div>
-          <div class="card"><div class="card-k">Checklist</div><div class="card-title">TXT</div><p class="card-text">Versión rápida para revisar pasos sin perderte.</p><div class="card-actions"><a class="btn ghost" href="CHECKLIST_SUPABASE_NERI.txt" target="_blank">Abrir checklist</a></div></div>
-        </div>
-      </section>
-    
-      <section class="panel" id="guia">
-        <div class="hero">
-          <div class="hero-kicker">Configuración rápida</div>
-          <h1 class="hero-title">GUÍA<br><span>EXPRESS</span></h1>
-          <p class="hero-copy">Sube solo este archivo a Vercel. Después pega tus llaves Supabase y sube las plantillas al bucket privado.</p>
+      <!-- CONFIGURACIÓN -->
+      <section class="panel" id="p-config">
+        <div class="page-hero">
+          <div class="page-kicker">Setup · Supabase + Vercel</div>
+          <h1 class="page-title">CONFI<em>GURACIÓN</em></h1>
+          <p class="page-quote">Este archivo va solo en Vercel. Las plantillas viven en Supabase Storage privado.</p>
         </div>
 
         <div class="notice">
-          <div class="card-k">Importante</div>
-          <p class="small">
-          Este archivo NO contiene las plantillas reales. Las plantillas deben ir en Supabase Storage privado.
-          </p>
+          <b>Solo este archivo index.html va en Vercel.</b> Las plantillas nunca se suben públicamente. Viven en el bucket privado de Supabase y solo se entregan con sesión autorizada.
         </div>
 
-        <div class="grid2">
+        <div class="grid2" style="margin-bottom:20px">
           <div class="card">
-            <div class="card-k">Paso 01</div>
-            <div class="card-title">Supabase</div>
-            <p class="card-text">
-            Crea proyecto → copia Project URL y anon public key → pégalas en el bloque CONFIG dentro de este mismo archivo.
-            </p>
+            <div class="card-kicker">Paso 01</div>
+            <div class="card-title">SUPABASE</div>
+            <p class="card-body">Crear proyecto → copiar Project URL y anon key → pegarlas en el bloque CONFIG de este archivo.</p>
           </div>
-
           <div class="card">
-            <div class="card-k">Paso 02</div>
-            <div class="card-title">Bucket Privado</div>
-            <p class="card-text">
-            Crea bucket privado llamado <span class="code">plantillas-neri</span> y sube tus HTMLs ahí.
-            </p>
+            <div class="card-kicker">Paso 02</div>
+            <div class="card-title">BUCKET</div>
+            <p class="card-body">Crear bucket privado <span class="code">plantillas-neri</span> → subir los archivos HTML con los nombres exactos del CONFIG.</p>
           </div>
-
           <div class="card">
-            <div class="card-k">Paso 03</div>
-            <div class="card-title">Usuarios</div>
-            <p class="card-text">
-            En Supabase Authentication crea un usuario por asesor.
-            </p>
+            <div class="card-kicker">Paso 03</div>
+            <div class="card-title">USUARIOS</div>
+            <p class="card-body">En Supabase Authentication → crear un usuario por asesor con correo y contraseña.</p>
           </div>
-
           <div class="card">
-            <div class="card-k">Paso 04</div>
-            <div class="card-title">Vercel</div>
-            <p class="card-text">
-            Arrastra SOLO este archivo index.html y publícalo.
-            </p>
+            <div class="card-kicker">Paso 04</div>
+            <div class="card-title">VERCEL</div>
+            <p class="card-body">Arrastrar solo este index.html → publicar. El sistema ya es privado desde el primer acceso.</p>
           </div>
         </div>
 
-        <div class="crm-box">
-          <div class="card-k">SQL sugerido para Storage</div>
-          <p class="small">
-          Ejecuta esto en Supabase SQL Editor:
+        <div class="crm-input-block">
+          <div class="crm-input-label">SQL requerido para Storage</div>
+          <p style="font-size:12px;color:var(--w35);line-height:1.7;margin-bottom:10px">
+            Ejecutar en Supabase → SQL Editor:
           </p>
-          <p class="small">
-          <span class="code">
-          create policy "Authenticated users can read plantillas"
-          on storage.objects
-          for select
-          to authenticated
-          using (bucket_id = 'plantillas-neri');
-          </span>
-          </p>
+          <div class="code-block">create policy "Authenticated users can read plantillas"<br>on storage.objects<br>for select<br>to authenticated<br>using (bucket_id = 'plantillas-neri');</div>
         </div>
       </section>
 
-</div>
+    </div><!-- /content -->
   </main>
 </div>
-<div class="toast" id="toast">Listo</div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-/* ══════════════════════════════════════════════════════════
-   CONFIG · MÉTODO NERI + SUPABASE
-   1. Crea proyecto en Supabase.
-   2. Copia Project URL en SUPABASE_URL.
-   3. Copia anon public key en SUPABASE_ANON_KEY.
-   4. Crea bucket privado: plantillas-neri.
-   5. Sube los archivos con los mismos nombres de storagePath.
-══════════════════════════════════════════════════════════ */
+/* ══════════════════════════════════════════════
+   CONFIG · MÉTODO NERI · SUPABASE
+   Pega tus credenciales aquí.
+══════════════════════════════════════════════ */
 const CONFIG = {
   SUPABASE_URL: "https://rehabzklftvgtunuhrzd.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_OBhu5cgFCjrkWqH0xUGTZg_9LhopkRl",
   BUCKET: "plantillas-neri",
-  SIGNED_URL_SECONDS: 60 * 5,
+  SIGNED_URL_SECONDS: 300,
   library: [
-    {k:"Cliente activo", t:"Portal de Progreso", d:"Timeline privado para que el cliente vea avance de operación.", storagePath:"Plantilla_progreso_whitelabel.html"},
-    {k:"Captación", t:"Landing Vendedores", d:"Portal del propietario personalizable.", storagePath:"Plantilla_Landing_Vendedores_Personalizable.html"},
-    {k:"Compradores", t:"Landing con Crédito", d:"Experiencia privada con score y diagnóstico.", storagePath:"Plantilla_Landing_Compradores_con_Credito_CORREGIDA.html"},
-    {k:"Viabilidad", t:"Opciones de Compra", d:"Evaluación de escenarios para comprador.", storagePath:"Plantilla_opciones-compra_Personalizable.html"},
-    {k:"Mensajes", t:"Sala de Reacción", d:"Librería operativa de respuestas.", storagePath:"sala_reaccion_Mensajes.html"},
-    {k:"Documentos", t:"Panel de Citas", d:"Generador operativo Método NERI.", storagePath:"MetodoNeri_Panel_Citas.html"},
-    {k:"Manual", t:"Manual Compradores", d:"Manual operativo de landing compradores.", storagePath:"Manual_Operacion_Compradores_v2.html"},
-    {k:"Sistema", t:"Design System", d:"Filosofía, identidad, narrativa y criterio.", storagePath:"sistema_neri_design_system.html"}
+    {
+      kicker: "Cliente activo",
+      title: "Portal de Progreso",
+      desc: "Timeline privado para que el cliente vea el avance de su operación en tiempo real.",
+      path: "Plantilla_progreso_whitelabel.html"
+    },
+    {
+      kicker: "Captación",
+      title: "Landing Vendedores",
+      desc: "Portal del propietario personalizable. Diagnóstico fiscal incluido.",
+      path: "Plantilla_Landing_Vendedores_Personalizable.html"
+    },
+    {
+      kicker: "Compradores",
+      title: "Landing con Crédito",
+      desc: "Experiencia privada con score crediticio y diagnóstico de viabilidad.",
+      path: "Plantilla_Landing_Compradores_con_Credito_CORREGIDA.html"
+    },
+    {
+      kicker: "Viabilidad",
+      title: "Opciones de Compra",
+      desc: "Evaluación de escenarios de financiamiento para el comprador.",
+      path: "Plantilla_opciones-compra_Personalizable.html"
+    },
+    {
+      kicker: "Mensajes",
+      title: "Sala de Reacción",
+      desc: "Librería operativa de respuestas para cada etapa del proceso.",
+      path: "sala_reaccion_Mensajes.html"
+    },
+    {
+      kicker: "Citas",
+      title: "Panel de Citas",
+      desc: "Generador operativo de documentos y agenda. Método NERI.",
+      path: "MetodoNeri_Panel_Citas.html"
+    },
+    {
+      kicker: "Manual",
+      title: "Manual Compradores",
+      desc: "Manual operativo completo de la landing de compradores v2.",
+      path: "Manual_Operacion_Compradores_v2.html"
+    },
+    {
+      kicker: "Sistema",
+      title: "Design System",
+      desc: "Filosofía, identidad visual, narrativa y criterio editorial del sistema.",
+      path: "sistema_neri_design_system.html"
+    }
   ]
 };
 
-let supabaseClient = null;
-let currentUser = null;
-
-const panels = [
-  ["dashboard","Dashboard","Visión general"],
-  ["biblioteca","Biblioteca","Archivos privados"],
-  ["crm","CRM Airtable","Operaciones"],
-  ["operacion","Protocolo","Ejecución"],
-  ["manuales","Manuales","Configuración"],
-  ["guia","Guía","Setup rápido"]
+/* ══ PANELS ══ */
+const PANELS = [
+  { id:"p-dashboard",  label:"Dashboard",    sub:"Visión general" },
+  { id:"p-biblioteca", label:"Biblioteca",   sub:"Archivos privados" },
+  { id:"p-crm",        label:"CRM",          sub:"Airtable operativo" },
+  { id:"p-protocolo",  label:"Protocolo",    sub:"Ejecución" },
+  { id:"p-config",     label:"Config",       sub:"Setup Supabase" }
 ];
 
+let sbClient = null;
+let currentUser = null;
+
+/* ── CONFIG CHECK ── */
 function isConfigured(){
-  return CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY &&
-    !CONFIG.SUPABASE_URL.includes("PEGA_AQUI") &&
-    !CONFIG.SUPABASE_ANON_KEY.includes("PEGA_AQUI");
+  return CONFIG.SUPABASE_URL &&
+    CONFIG.SUPABASE_ANON_KEY &&
+    !CONFIG.SUPABASE_URL.includes("PEGA") &&
+    !CONFIG.SUPABASE_ANON_KEY.includes("PEGA");
 }
 
-function initSupabase(){
+function initSB(){
   if(!isConfigured()){
-    document.getElementById("loginError").innerHTML = "Falta configurar Supabase en el bloque CONFIG del index.html.";
-    return;
+    document.getElementById("loginError").textContent = "Configura Supabase en el bloque CONFIG de index.html.";
+    return false;
   }
-  supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+  if(!sbClient) sbClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+  return true;
 }
 
-function showToast(msg){
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1800);
-}
-
+/* ── AUTH ── */
 async function signIn(){
-  if(!supabaseClient) initSupabase();
-  if(!supabaseClient) return;
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
+  if(!initSB()) return;
+  const email = document.getElementById("loginEmail").value.trim();
+  const pass  = document.getElementById("loginPass").value;
   document.getElementById("loginError").textContent = "";
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+  const { data, error } = await sbClient.auth.signInWithPassword({ email, password: pass });
   if(error){
-    document.getElementById("loginError").textContent = "No se pudo entrar: " + error.message;
+    document.getElementById("loginError").textContent = "Acceso denegado. Verifica tus credenciales.";
     return;
   }
   currentUser = data.user;
@@ -373,7 +796,7 @@ async function signIn(){
 }
 
 async function signOut(){
-  if(supabaseClient) await supabaseClient.auth.signOut();
+  if(sbClient) await sbClient.auth.signOut();
   currentUser = null;
   document.getElementById("app").classList.add("hidden");
   document.getElementById("login").classList.remove("hidden");
@@ -381,12 +804,15 @@ async function signOut(){
 
 async function checkSession(){
   if(!isConfigured()){
-    document.getElementById("configAlert").innerHTML = `<div class="config-warning"><strong>Falta configuración:</strong> pega tu Supabase URL y Anon Key en el bloque CONFIG de index.html.</div>`;
-    document.getElementById("loginError").innerHTML = "Falta configurar Supabase en el bloque CONFIG del index.html.";
+    document.getElementById("configAlert").innerHTML = `
+      <div class="notice" style="margin-bottom:24px">
+        <b>Falta configuración:</b> pega tu Supabase URL y Anon Key en el bloque CONFIG de index.html.
+      </div>`;
+    document.getElementById("loginError").textContent = "Configura Supabase en el bloque CONFIG.";
     return;
   }
-  initSupabase();
-  const { data } = await supabaseClient.auth.getSession();
+  initSB();
+  const { data } = await sbClient.auth.getSession();
   if(data.session?.user){
     currentUser = data.session.user;
     openApp();
@@ -396,88 +822,107 @@ async function checkSession(){
 function openApp(){
   document.getElementById("login").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
-  document.getElementById("userEmail").textContent = currentUser?.email || "Usuario autorizado";
+  const email = currentUser?.email || "—";
+  document.getElementById("sessionUser").textContent = email;
+  document.getElementById("topUser").textContent = email;
+  document.getElementById("statFiles").textContent = String(CONFIG.library.length).padStart(2,"0");
 }
 
-async function openPrivateFile(path, mode="open"){
-  if(!supabaseClient){ showToast("Falta Supabase"); return; }
-  const { data, error } = await supabaseClient.storage
+/* ── PRIVATE FILE ── */
+async function openFile(path, download=false){
+  if(!sbClient){ showToast("Sin conexión"); return; }
+  const { data, error } = await sbClient.storage
     .from(CONFIG.BUCKET)
-    .createSignedUrl(path, CONFIG.SIGNED_URL_SECONDS, { download: mode === "download" });
+    .createSignedUrl(path, CONFIG.SIGNED_URL_SECONDS, { download });
   if(error){
-    alert("No se pudo generar acceso privado. Revisa bucket, nombre del archivo y políticas. Error: " + error.message);
+    alert("No se pudo acceder. Verifica bucket y permisos.\n" + error.message);
     return;
   }
   window.open(data.signedUrl, "_blank");
 }
 
+/* ── NAV ── */
 function buildNav(){
   const side = document.getElementById("sideNav");
-  const mob = document.getElementById("mobileNav");
+  const mob  = document.getElementById("mobileNav");
   side.innerHTML = ""; mob.innerHTML = "";
-  panels.forEach((p,i)=>{
-    const html = `<span class="nav-n">${String(i+1).padStart(2,"0")}</span><div><div class="nav-t">${p[1]}</div><div class="nav-s">${p[2]}</div></div>`;
-    const b = document.createElement("button");
-    b.className = "nav-btn" + (i===0 ? " active" : "");
-    b.innerHTML = html;
-    b.onclick = () => showPanel(p[0]);
-    side.appendChild(b);
-    const bm = b.cloneNode(true);
-    bm.onclick = () => showPanel(p[0]);
-    mob.appendChild(bm);
+  PANELS.forEach((p,i) => {
+    const n = String(i+1).padStart(2,"0");
+    const makeBtn = (isMob) => {
+      const b = document.createElement("button");
+      b.className = "nav-btn" + (i===0 ? " active" : "");
+      b.dataset.panel = p.id;
+      b.innerHTML = `
+        <span class="nav-num">${n}</span>
+        <span class="nav-label">
+          <span class="nav-t">${p.label}</span>
+          <span class="nav-s">${p.sub}</span>
+        </span>
+        <span class="nav-dot"></span>`;
+      b.onclick = () => showPanel(p.id);
+      return b;
+    };
+    side.appendChild(makeBtn(false));
+    mob.appendChild(makeBtn(true));
   });
 }
 
 function showPanel(id){
-  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
-  const idx = panels.findIndex(p=>p[0]===id);
-  document.querySelectorAll(".nav").forEach(nav => {
-    const btn = nav.children[idx];
-    if(btn) btn.classList.add("active");
+  document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+  document.getElementById(id)?.classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.panel === id);
   });
-  const mbtn = document.getElementById("mobileNav").children[idx];
-  if(mbtn) mbtn.classList.add("active");
-  document.getElementById("topTitle").textContent = panels[idx]?.[1] || "Centro de Comando";
+  const p = PANELS.find(x => x.id === id);
+  document.getElementById("topSection").textContent = p?.label || "NERI";
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
+/* ── LIBRARY ── */
 function buildLibrary(){
   const grid = document.getElementById("libraryGrid");
-  grid.innerHTML = CONFIG.library.map((x,i)=>`
-    <div class="card">
-      <div class="card-k">${x.k}</div>
-      <div class="card-title">${x.t}</div>
-      <p class="card-text">${x.d}</p>
-      <p class="small" style="margin-top:10px;">Ruta privada: <span class="code">${x.storagePath}</span></p>
-      <div class="card-actions">
-        <button class="btn primary" onclick="openPrivateFile('${x.storagePath}','open')">Abrir privado</button>
-        <button class="btn ghost" onclick="openPrivateFile('${x.storagePath}','download')">Descargar</button>
+  grid.innerHTML = CONFIG.library.map(x => `
+    <div class="lib-card">
+      <div class="lib-kicker">${x.kicker}</div>
+      <div class="lib-title">${x.title}</div>
+      <p class="lib-desc">${x.desc}</p>
+      <div class="lib-actions">
+        <button class="btn primary" onclick="openFile('${x.path}',false)">Abrir</button>
+        <button class="btn ghost" onclick="openFile('${x.path}',true)">Descargar</button>
       </div>
-    </div>
-  `).join("");
+    </div>`).join("");
 }
 
+/* ── CRM ── */
 function saveAirtable(){
   const url = document.getElementById("airtableUrl").value.trim();
-  if(!url){return}
-  localStorage.setItem("neri_airtable_embed", url);
+  if(!url) return;
+  localStorage.setItem("neri_crm_url", url);
   document.getElementById("crmFrame").src = url;
-  showToast("CRM guardado");
+  showToast("Vista guardada");
 }
 function clearAirtable(){
-  localStorage.removeItem("neri_airtable_embed");
+  localStorage.removeItem("neri_crm_url");
   document.getElementById("airtableUrl").value = "";
   document.getElementById("crmFrame").removeAttribute("src");
-  showToast("CRM limpio");
+  showToast("Vista limpiada");
 }
 function loadAirtable(){
-  const url = localStorage.getItem("neri_airtable_embed") || "";
+  const url = localStorage.getItem("neri_crm_url") || "";
+  if(!url) return;
   document.getElementById("airtableUrl").value = url;
-  if(url) document.getElementById("crmFrame").src = url;
+  document.getElementById("crmFrame").src = url;
 }
 
+/* ── TOAST ── */
+function showToast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+/* ── INIT ── */
 buildNav();
 buildLibrary();
 loadAirtable();
