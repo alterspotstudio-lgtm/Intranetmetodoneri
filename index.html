@@ -234,6 +234,135 @@ button,input,textarea,select{font-family:var(--body)}
   .msg-grid{grid-template-columns:1fr}
 }
 </style>
+<style>
+/* ── PANEL DE CITAS (docs) ── */
+.docs-console{display:flex;height:calc(100vh - 200px);min-height:600px;border:1px solid rgba(198,168,107,0.22);border-radius:3px;overflow:hidden;}
+.docs-console .sidebar{width:380px;min-width:380px;background:#111111;border-right:1px solid rgba(198,168,107,0.22);display:flex;flex-direction:column;overflow-y:auto;max-height:100%;}
+.docs-console .sidebar-top{padding:24px 22px 0;}
+.docs-console .brand{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#C6A86B;}
+.docs-console .brand-sub{font-size:9px;font-weight:500;letter-spacing:3px;color:rgba(255,255,255,0.35);text-transform:uppercase;margin-top:3px;}
+.docs-console .brand-line{width:36px;height:1px;background:rgba(198,168,107,0.45);margin-top:14px;}
+.docs-console .tabs{display:flex;flex-direction:column;gap:2px;padding:16px 22px 0;}
+.docs-console .tab-btn{display:flex;align-items:center;gap:12px;padding:10px 12px;background:transparent;border:1px solid transparent;border-radius:3px;cursor:pointer;text-align:left;transition:all 0.18s;color:rgba(255,255,255,0.35);}
+.docs-console .tab-btn:hover{background:rgba(198,168,107,0.10);color:rgba(255,255,255,0.60);}
+.docs-console .tab-btn.active{background:rgba(198,168,107,0.10);border-color:rgba(198,168,107,0.22);color:rgba(255,255,255,1);}
+.docs-console .tab-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#C6A86B;line-height:1;min-width:20px;}
+.docs-console .tab-label{font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;line-height:1.3;}
+.docs-console .tab-sub{font-size:9px;font-weight:400;color:rgba(255,255,255,0.18);margin-top:2px;letter-spacing:0.5px;text-transform:none;}
+.docs-console .tab-btn.active .tab-sub{color:rgba(255,255,255,0.35);}
+.docs-console .sidebar-divider{height:1px;background:rgba(255,255,255,0.08);margin:14px 22px;}
+.docs-console .asesor-section{padding:0 22px 16px;}
+.docs-console .sec-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C6A86B;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.docs-console .sec-label::after{content:'';flex:1;height:1px;background:rgba(198,168,107,0.10);}
+.docs-console .field{margin-bottom:9px;}
+.docs-console .field label{display:block;font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;}
+.docs-console .field input,.docs-console .field select,.docs-console .field textarea{width:100%;background:#181818;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,1);font-family:'Montserrat',sans-serif;font-size:12px;padding:8px 11px;border-radius:3px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;}
+.docs-console .field input:focus,.docs-console .field select:focus,.docs-console .field textarea:focus{border-color:rgba(198,168,107,0.45);}
+.docs-console .field input::placeholder,.docs-console .field textarea::placeholder{color:rgba(255,255,255,0.18);}
+.docs-console .field select option{background:#181818;}
+.docs-console .field textarea{resize:vertical;min-height:52px;}
+.docs-console .field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.docs-console .form-scroll{flex:1;overflow-y:auto;padding:0 22px 20px;}
+.docs-console .form-panel{display:none;}
+.docs-console .form-panel.active{display:block;}
+.docs-console .check-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:2px;}
+.docs-console .check-item{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:3px;cursor:pointer;transition:all 0.18s;}
+.docs-console .check-item:hover{border-color:rgba(198,168,107,0.22);}
+.docs-console .check-item.on{border-color:rgba(198,168,107,0.45);background:rgba(198,168,107,0.10);}
+.docs-console .check-item input[type=checkbox]{width:13px;min-width:13px;height:13px;accent-color:#C6A86B;margin-top:1px;cursor:pointer;}
+.docs-console .check-item span{font-size:10px;font-weight:500;color:rgba(255,255,255,0.60);line-height:1.3;}
+.docs-console .check-item.on span{color:#E2C98A;}
+.docs-console .check-full{display:flex;align-items:flex-start;gap:10px;padding:9px 11px;background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:3px;margin-bottom:5px;cursor:pointer;transition:all 0.18s;}
+.docs-console .check-full:hover{border-color:rgba(198,168,107,0.22);}
+.docs-console .check-full.on{border-color:rgba(198,168,107,0.45);background:rgba(198,168,107,0.10);}
+.docs-console .check-full input[type=checkbox]{width:13px;min-width:13px;height:13px;accent-color:#C6A86B;margin-top:2px;cursor:pointer;}
+.docs-console .check-full-text .t{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);line-height:1.3;}
+.docs-console .check-full-text .s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:2px;}
+.docs-console .check-full.on .check-full-text .t{color:#E2C98A;}
+.docs-console .radio-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:3px;margin-bottom:5px;cursor:pointer;transition:all 0.18s;}
+.docs-console .radio-item:hover{border-color:rgba(198,168,107,0.22);}
+.docs-console .radio-item.on{border-color:rgba(198,168,107,0.45);background:rgba(198,168,107,0.10);}
+.docs-console .radio-item input[type=radio]{width:13px;min-width:13px;height:13px;accent-color:#C6A86B;margin-top:2px;cursor:pointer;}
+.docs-console .radio-item .t{font-size:11px;font-weight:600;color:rgba(255,255,255,0.60);line-height:1.3;}
+.docs-console .radio-item .s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:2px;}
+.docs-console .radio-item.on .t{color:#E2C98A;}
+.docs-console .metrics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.docs-console .btn-gen{width:100%;padding:12px;background:#C6A86B;color:#0A0A0A;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;border:none;border-radius:3px;cursor:pointer;transition:all 0.18s;margin-top:14px;}
+.docs-console .btn-gen:hover{background:#E2C98A;}
+.docs-console .btn-print{width:100%;padding:10px;background:transparent;color:#C6A86B;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(198,168,107,0.45);border-radius:3px;cursor:pointer;transition:all 0.18s;margin-top:7px;display:none;}
+.docs-console .btn-print:hover{background:rgba(198,168,107,0.10);}
+.docs-console .btn-wa{width:100%;padding:10px;background:transparent;color:#25D366;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(37,211,102,0.35);border-radius:3px;cursor:pointer;transition:all 0.18s;margin-top:7px;display:none;}
+.docs-console .btn-wa:hover{background:rgba(37,211,102,0.07);}
+.docs-console .preview-area{flex:1;background:#141414;overflow-y:auto;padding:28px 32px;display:flex;flex-direction:column;align-items:center;}
+.docs-console .preview-label{font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:20px;align-self:flex-start;}
+.docs-console .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:50vh;gap:10px;opacity:0.3;}
+.docs-console .empty-big{font-family:'Bebas Neue',sans-serif;font-size:64px;letter-spacing:4px;color:#C6A86B;}
+.docs-console .empty-sm{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.35);}
+.docs-console .dc-card{width:660px;max-width:100%;background:#0A0A0A;border-top:1px solid rgba(198,168,107,0.22);border-bottom:1px solid rgba(198,168,107,0.22);font-family:'Montserrat',sans-serif;}
+.docs-console .dc-card.hidden{display:none;}
+.docs-console .c-header{background:#111111;border-bottom:1px solid rgba(198,168,107,0.22);padding:20px 28px;display:flex;align-items:center;justify-content:space-between;}
+.docs-console .c-asesor-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:rgba(255,255,255,1);}
+.docs-console .c-asesor-meta{font-size:9px;color:rgba(255,255,255,0.35);margin-top:3px;}
+.docs-console .c-logo{display:flex;align-items:center;justify-content:flex-end;}
+.docs-console .c-hero{padding:24px 28px 20px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.docs-console .c-hero-tag{font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#C6A86B;margin-bottom:8px;}
+.docs-console .c-hero-h{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:2px;color:rgba(255,255,255,1);line-height:1;}
+.docs-console .c-hero-sub{font-family:'Cormorant Garamond','Georgia',serif;font-style:italic;font-size:13px;color:rgba(255,255,255,0.35);margin-top:6px;line-height:1.5;}
+.docs-console .c-body{padding:0 28px;}
+.docs-console .c-spacer{height:18px;}
+.docs-console .sec-bar{display:flex;align-items:center;margin-bottom:0;}
+.docs-console .sec-bar-lbl{background:#C6A86B;color:#0A0A0A;font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:5px 12px;flex-shrink:0;}
+.docs-console .sec-bar-line{flex:1;height:1px;background:rgba(198,168,107,0.22);}
+.docs-console .data-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .data-cell{padding:11px 16px;border-right:1px solid rgba(255,255,255,0.04);border-bottom:1px solid rgba(255,255,255,0.04);}
+.docs-console .data-cell:nth-child(even){border-right:none;}
+.docs-console .data-cell.full{grid-column:1/-1;}
+.docs-console .d-lbl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:3px;}
+.docs-console .d-val{font-size:12px;font-weight:500;color:rgba(255,255,255,1);}
+.docs-console .d-val.gold{color:#C6A86B;font-size:13px;font-weight:600;}
+.docs-console .d-val.big{font-family:'Bebas Neue',sans-serif;font-size:26px;color:#C6A86B;letter-spacing:1px;line-height:1;}
+.docs-console .check-card-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .check-card-row{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);}
+.docs-console .check-card-row:nth-child(even){border-right:none;}
+.docs-console .check-num{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#C6A86B;flex-shrink:0;margin-top:1px;}
+.docs-console .check-t{font-size:10px;font-weight:600;color:rgba(255,255,255,1);line-height:1.3;}
+.docs-console .check-s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:1px;line-height:1.3;}
+.docs-console .prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .prod-item{padding:11px 14px;border-right:1px solid rgba(255,255,255,0.04);}
+.docs-console .prod-item:last-child{border-right:none;}
+.docs-console .prod-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#C6A86B;line-height:1;}
+.docs-console .prod-t{font-size:10px;font-weight:600;color:rgba(255,255,255,1);margin-top:3px;line-height:1.3;}
+.docs-console .prod-s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:1px;line-height:1.3;}
+.docs-console .ajuste-grid{display:grid;grid-template-columns:1fr;border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .ajuste-row{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.docs-console .ajuste-row:last-child{border-bottom:none;}
+.docs-console .ajuste-num{font-family:'Bebas Neue',sans-serif;font-size:17px;color:#C6A86B;flex-shrink:0;}
+.docs-console .ajuste-dot{width:13px;height:13px;border:1.5px solid rgba(198,168,107,0.22);border-radius:50%;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;}
+.docs-console .ajuste-dot.on{background:#C6A86B;border-color:#C6A86B;}
+.docs-console .ajuste-t{font-size:11px;font-weight:600;color:rgba(255,255,255,1);line-height:1.3;}
+.docs-console .ajuste-s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:2px;line-height:1.3;}
+.docs-console .docs-list{border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .doc-row{display:flex;align-items:flex-start;gap:12px;padding:10px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.docs-console .doc-row:last-child{border-bottom:none;}
+.docs-console .doc-num{font-family:'Bebas Neue',sans-serif;font-size:14px;color:#C6A86B;flex-shrink:0;margin-top:1px;}
+.docs-console .doc-t{font-size:11px;font-weight:600;color:rgba(255,255,255,1);line-height:1.3;}
+.docs-console .doc-s{font-size:9px;font-weight:300;color:rgba(255,255,255,0.35);margin-top:1px;}
+.docs-console .analysis-block{border:1px solid rgba(255,255,255,0.08);border-top:none;}
+.docs-console .analysis-cell{padding:13px 16px;border-bottom:1px solid rgba(255,255,255,0.04);}
+.docs-console .analysis-cell:last-child{border-bottom:none;}
+.docs-console .analysis-lbl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.18);margin-bottom:5px;}
+.docs-console .analysis-txt{font-size:11px;font-weight:400;color:rgba(255,255,255,0.60);line-height:1.6;white-space:pre-wrap;}
+.docs-console .c-footer{margin:18px 28px 0;border-top:1px solid rgba(198,168,107,0.22);padding:12px 0 20px;display:flex;align-items:center;justify-content:space-between;}
+.docs-console .c-footer-msg{font-size:9px;font-style:italic;color:rgba(255,255,255,0.35);}
+.docs-console .c-footer-tel{font-size:10px;font-weight:600;color:#C6A86B;letter-spacing:1px;}
+.docs-console .wa-block{margin-top:16px;width:660px;max-width:100%;background:#111111;border:1px solid rgba(198,168,107,0.22);border-radius:3px;padding:18px 20px;}
+.docs-console .wa-lbl{font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:#25D366;margin-bottom:8px;}
+.docs-console .wa-msg{background:#181818;border:1px solid rgba(255,255,255,0.08);border-radius:3px;padding:12px 14px;font-size:12px;color:rgba(255,255,255,0.60);line-height:1.7;white-space:pre-wrap;word-break:break-word;}
+.docs-console .wa-copy{margin-top:7px;padding:7px 14px;background:transparent;color:#25D366;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(37,211,102,0.3);border-radius:3px;cursor:pointer;transition:all 0.18s;}
+.docs-console .wa-copy:hover{background:rgba(37,211,102,0.07);}
+.docs-console .hidden{display:none!important;}
+</style>
+
 </head>
 <body>
 
@@ -379,9 +508,223 @@ button,input,textarea,select{font-family:var(--body)}
           <h1 class="ph-title">MIS<br><em>DOCUMENTOS</em></h1>
           <p class="ph-sub">Genera confirmaciones, reportes quincenales y citas de notaría.</p>
         </div>
-        <div class="embed-wrap">
-          <iframe id="docsFrame" class="embed-frame" style="height:760px" title="Panel de Documentos"></iframe>
-        </div>
+        <div class="docs-console">
+
+          <!-- SIDEBAR CITAS -->
+          <div class="sidebar">
+            <div class="sidebar-top">
+              <div class="brand">MÉTODO NERI</div>
+              <div class="brand-sub">Panel de Documentos</div>
+              <div class="brand-line"></div>
+            </div>
+            <div class="tabs">
+              <button class="tab-btn active" onclick="dcSwitchTab('produccion',this)">
+                <span class="tab-num">01</span>
+                <div><div class="tab-label">Producción</div><div class="tab-sub">Cita de grabación</div></div>
+              </button>
+              <button class="tab-btn" onclick="dcSwitchTab('reporte',this)">
+                <span class="tab-num">02</span>
+                <div><div class="tab-label">Reporte Semanal</div><div class="tab-sub">Métricas de publicidad</div></div>
+              </button>
+              <button class="tab-btn" onclick="dcSwitchTab('notaria',this)">
+                <span class="tab-num">03</span>
+                <div><div class="tab-label">Notaría</div><div class="tab-sub">Confirmación de cita</div></div>
+              </button>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="asesor-section">
+              <div class="sec-label">Asesor</div>
+              <div class="field">
+                <label>Nombre</label>
+                <input type="text" id="dc_g_asesor" placeholder="Enrique Martínez Neri">
+              </div>
+              <div class="field-row">
+                <div class="field"><label>Teléfono</label><input type="text" id="dc_g_tel" placeholder="777 985 5687"></div>
+                <div class="field"><label>Inmobiliaria</label><input type="text" id="dc_g_inmo" placeholder="Century 21 Haus"></div>
+              </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div class="form-scroll">
+
+              <!-- TAB 1: PRODUCCIÓN -->
+              <div class="form-panel active" id="dc-panel-produccion">
+                <div class="sec-label">Sesión</div>
+                <div class="field"><label>Propietario</label><input type="text" id="dc_p_prop" placeholder="Nombre del propietario"></div>
+                <div class="field"><label>Dirección</label><input type="text" id="dc_p_dir" placeholder="Colonia, ciudad"></div>
+                <div class="field-row">
+                  <div class="field"><label>Fecha</label><input type="text" id="dc_p_fecha" placeholder="Lunes 2 de junio"></div>
+                  <div class="field"><label>Hora</label><input type="text" id="dc_p_hora" placeholder="10:00 am"></div>
+                </div>
+                <div class="field">
+                  <label>Duración</label>
+                  <select id="dc_p_dur">
+                    <option value="">Seleccionar...</option>
+                    <option>1 hora aprox.</option><option>1.5 horas aprox.</option>
+                    <option>2 horas aprox.</option><option>2.5 horas aprox.</option><option>3 horas aprox.</option>
+                  </select>
+                </div>
+                <div class="sec-label" style="margin-top:14px;">Preparación</div>
+                <div class="check-grid" id="dc_p_check_form"></div>
+                <div class="sec-label" style="margin-top:14px;">Producción</div>
+                <div id="dc_p_prod_form"></div>
+                <button class="btn-gen" onclick="dcGenProduccion()">↳ Generar confirmación</button>
+                <button class="btn-print" id="dc_bp_print" onclick="dcImprimirTarjeta('dc-card-produccion')">⬇ Guardar / Imprimir</button>
+                <button class="btn-wa" id="dc_bp_wa" onclick="dcCopiarWA('dc-wa-produccion')">● Copiar mensaje WhatsApp</button>
+              </div>
+
+              <!-- TAB 2: REPORTE -->
+              <div class="form-panel" id="dc-panel-reporte">
+                <div class="sec-label">Identificación</div>
+                <div class="field"><label>Propietario / Vendedor</label><input type="text" id="dc_r_prop" placeholder="Nombre del propietario"></div>
+                <div class="field"><label>Propiedad / Dirección</label><input type="text" id="dc_r_dir" placeholder="Lomas de Ahuatlán / dirección"></div>
+                <div class="field"><label>Período del reporte</label><input type="text" id="dc_r_semana" placeholder="1 al 15 de mayo, 2025"></div>
+                <div class="sec-label" style="margin-top:14px;">Métricas</div>
+                <div class="metrics-grid">
+                  <div class="field"><label>Alcance</label><input type="text" id="dc_r_alcance" placeholder="Personas que vieron"></div>
+                  <div class="field"><label>Reproducciones</label><input type="text" id="dc_r_repro" placeholder="del video"></div>
+                  <div class="field"><label>Clics</label><input type="text" id="dc_r_clics" placeholder="en el anuncio"></div>
+                  <div class="field"><label>Leads totales</label><input type="text" id="dc_r_leads" placeholder="mensajes recibidos"></div>
+                  <div class="field"><label>Leads calificados</label><input type="text" id="dc_r_lcal" placeholder="pasaron el filtro"></div>
+                  <div class="field"><label>Visitas</label><input type="text" id="dc_r_visitas" placeholder="a la propiedad"></div>
+                  <div class="field"><label>Presupuesto ($)</label><input type="text" id="dc_r_presupuesto" placeholder="invertido en pauta"></div>
+                  <div class="field"><label>Costo/lead ($)</label><input type="text" id="dc_r_cpl" placeholder="costo por lead cal."></div>
+                </div>
+                <div class="sec-label" style="margin-top:14px;">Análisis</div>
+                <div class="field"><label>Comentarios frecuentes</label><textarea id="dc_r_comentarios" placeholder="Qué preguntan más los interesados..."></textarea></div>
+                <div class="field"><label>Observaciones del asesor</label><textarea id="dc_r_obs" placeholder="Contexto del mercado en este período..."></textarea></div>
+                <div class="sec-label" style="margin-top:14px;">Ajuste estratégico</div>
+                <label class="radio-item" id="dc_ri0" onclick="dcSelectRadio(0)"><input type="radio" name="dc_ajuste" value="0"> <div><div class="t">Mantener la estrategia actual</div><div class="s">Los resultados van en la dirección correcta</div></div></label>
+                <label class="radio-item" id="dc_ri1" onclick="dcSelectRadio(1)"><input type="radio" name="dc_ajuste" value="1"> <div><div class="t">Ajustar precio de la propiedad</div><div class="s">Basado en feedback del mercado</div></div></label>
+                <label class="radio-item" id="dc_ri2" onclick="dcSelectRadio(2)"><input type="radio" name="dc_ajuste" value="2"> <div><div class="t">Cambiar segmentación del anuncio</div><div class="s">Ampliar o afinar el perfil del comprador</div></div></label>
+                <button class="btn-gen" onclick="dcGenReporte()">↳ Generar reporte</button>
+                <button class="btn-print" id="dc_br_print" onclick="dcImprimirTarjeta('dc-card-reporte')">⬇ Guardar / Imprimir</button>
+                <button class="btn-wa" id="dc_br_wa" onclick="dcCopiarWA('dc-wa-reporte')">● Copiar mensaje WhatsApp</button>
+              </div>
+
+              <!-- TAB 3: NOTARÍA -->
+              <div class="form-panel" id="dc-panel-notaria">
+                <div class="sec-label">Cliente</div>
+                <div class="field"><label>Nombre del cliente</label><input type="text" id="dc_n_cliente" placeholder="Nombre completo"></div>
+                <div class="field-row">
+                  <div class="field"><label>Fecha</label><input type="text" id="dc_n_fecha" placeholder="Lunes 2 de junio"></div>
+                  <div class="field"><label>Hora</label><input type="text" id="dc_n_hora" placeholder="10:00 am"></div>
+                </div>
+                <div class="sec-label" style="margin-top:14px;">Notaría</div>
+                <div class="field"><label>Nombre de la notaría</label><input type="text" id="dc_n_notaria" placeholder="Notaría Pública No. 5"></div>
+                <div class="field"><label>Notario que recibe</label><input type="text" id="dc_n_notario" placeholder="Lic. Juan Pérez"></div>
+                <div class="field"><label>Dirección</label><input type="text" id="dc_n_dir" placeholder="Calle, número, colonia"></div>
+                <div class="field"><label>Referencia / Cómo llegar</label><input type="text" id="dc_n_ref" placeholder="Frente al parque, piso 3..."></div>
+                <div class="sec-label" style="margin-top:14px;">Documentos requeridos</div>
+                <div id="dc_n_docs_form"></div>
+                <button class="btn-gen" onclick="dcGenNotaria()">↳ Generar confirmación</button>
+                <button class="btn-print" id="dc_bn_print" onclick="dcImprimirTarjeta('dc-card-notaria')">⬇ Guardar / Imprimir</button>
+                <button class="btn-wa" id="dc_bn_wa" onclick="dcCopiarWA('dc-wa-notaria')">● Copiar mensaje WhatsApp</button>
+              </div>
+
+            </div><!-- /form-scroll -->
+          </div><!-- /sidebar -->
+
+          <!-- PREVIEW -->
+          <div class="preview-area">
+            <div class="preview-label">Vista previa · Tarjeta exportable</div>
+            <div class="empty-state" id="dc-empty-state">
+              <div class="empty-big">NERI</div>
+              <div class="empty-sm">Selecciona un documento · Llena los datos</div>
+            </div>
+
+            <!-- TARJETA PRODUCCIÓN -->
+            <div class="dc-card hidden" id="dc-card-produccion">
+              <div class="c-header"><div><div class="c-asesor-name" id="dc_cp_nombre"></div><div class="c-asesor-meta" id="dc_cp_meta"></div></div><div class="c-logo" id="dc_cp_logo"></div></div>
+              <div class="c-hero"><div class="c-hero-tag">● Confirmación de cita · Producción inmobiliaria</div><div class="c-hero-h">LLEGÓ LA HORA.</div><div class="c-hero-sub">Mañana damos a conocer a la estrella de este proceso — su propiedad.</div></div>
+              <div class="c-body">
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Datos de la sesión</div><div class="sec-bar-line"></div></div>
+                <div class="data-grid">
+                  <div class="data-cell"><div class="d-lbl">Propietario</div><div class="d-val" id="dc_cp_prop"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Dirección</div><div class="d-val" id="dc_cp_dir"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Fecha</div><div class="d-val gold" id="dc_cp_fecha"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Hora de llegada</div><div class="d-val gold" id="dc_cp_hora"></div></div>
+                  <div class="data-cell full"><div class="d-lbl">Duración estimada</div><div class="d-val" id="dc_cp_dur"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Preparación de la propiedad</div><div class="sec-bar-line"></div></div>
+                <div class="check-card-grid" id="dc_cp_checklist"></div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Lo que vamos a producir</div><div class="sec-bar-line"></div></div>
+                <div class="prod-grid" id="dc_cp_prod"></div>
+              </div>
+              <div class="c-footer"><div class="c-footer-msg">¿Necesitas cambiar algo? Avísame con anticipación.</div><div class="c-footer-tel" id="dc_cp_tel"></div></div>
+            </div>
+            <div class="wa-block hidden" id="dc-wa-produccion"><div class="wa-lbl">● Mensaje WhatsApp</div><div class="wa-msg" id="dc-wa-produccion-txt"></div><button class="wa-copy" onclick="dcCopiarWA('dc-wa-produccion')">Copiar</button></div>
+
+            <!-- TARJETA REPORTE -->
+            <div class="dc-card hidden" id="dc-card-reporte">
+              <div class="c-header"><div><div class="c-asesor-name" id="dc_cr_nombre"></div><div class="c-asesor-meta" id="dc_cr_meta"></div></div><div class="c-logo" id="dc_cr_logo"></div></div>
+              <div class="c-hero"><div class="c-hero-tag">● Reporte quincenal · Resultados de publicidad</div><div class="c-hero-h">ASÍ VAMOS.</div><div class="c-hero-sub">Un resumen claro de lo que ocurrió en este período y el siguiente paso estratégico.</div></div>
+              <div class="c-body">
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Identificación</div><div class="sec-bar-line"></div></div>
+                <div class="data-grid">
+                  <div class="data-cell"><div class="d-lbl">Propietario</div><div class="d-val" id="dc_cr_prop"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Propiedad</div><div class="d-val" id="dc_cr_dir"></div></div>
+                  <div class="data-cell full"><div class="d-lbl">Período</div><div class="d-val gold" id="dc_cr_semana"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Resultados del período</div><div class="sec-bar-line"></div></div>
+                <div class="data-grid">
+                  <div class="data-cell"><div class="d-lbl">Alcance</div><div class="d-val big" id="dc_cr_alcance"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Reproducciones</div><div class="d-val big" id="dc_cr_repro"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Clics</div><div class="d-val big" id="dc_cr_clics"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Leads totales</div><div class="d-val big" id="dc_cr_leads"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Leads calificados</div><div class="d-val big" id="dc_cr_lcal"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Visitas</div><div class="d-val big" id="dc_cr_visitas"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Presupuesto</div><div class="d-val" id="dc_cr_presupuesto"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Costo / lead cal.</div><div class="d-val" id="dc_cr_cpl"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Análisis del período</div><div class="sec-bar-line"></div></div>
+                <div class="analysis-block">
+                  <div class="analysis-cell"><div class="analysis-lbl">Comentarios frecuentes de interesados</div><div class="analysis-txt" id="dc_cr_comentarios"></div></div>
+                  <div class="analysis-cell"><div class="analysis-lbl">Observaciones del asesor</div><div class="analysis-txt" id="dc_cr_obs"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Ajuste estratégico recomendado</div><div class="sec-bar-line"></div></div>
+                <div class="ajuste-grid" id="dc_cr_ajuste"></div>
+              </div>
+              <div class="c-footer"><div class="c-footer-msg">Método Neri · Sistema de Control de Calidad Inmobiliaria</div><div class="c-footer-tel" id="dc_cr_tel"></div></div>
+            </div>
+            <div class="wa-block hidden" id="dc-wa-reporte"><div class="wa-lbl">● Mensaje WhatsApp</div><div class="wa-msg" id="dc-wa-reporte-txt"></div><button class="wa-copy" onclick="dcCopiarWA('dc-wa-reporte')">Copiar</button></div>
+
+            <!-- TARJETA NOTARÍA -->
+            <div class="dc-card hidden" id="dc-card-notaria">
+              <div class="c-header"><div><div class="c-asesor-name" id="dc_cn_nombre"></div><div class="c-asesor-meta" id="dc_cn_meta"></div></div><div class="c-logo" id="dc_cn_logo"></div></div>
+              <div class="c-hero"><div class="c-hero-tag">● Confirmación · Cita en notaría</div><div class="c-hero-h">TODO ESTÁ LISTO.</div><div class="c-hero-sub">Aquí tiene todo lo que necesita saber para llegar con claridad y sin contratiempos.</div></div>
+              <div class="c-body">
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Datos de la cita</div><div class="sec-bar-line"></div></div>
+                <div class="data-grid">
+                  <div class="data-cell full"><div class="d-lbl">Cliente</div><div class="d-val" id="dc_cn_cliente"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Fecha</div><div class="d-val gold" id="dc_cn_fecha"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Hora</div><div class="d-val gold" id="dc_cn_hora"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Datos de la notaría</div><div class="sec-bar-line"></div></div>
+                <div class="data-grid">
+                  <div class="data-cell"><div class="d-lbl">Notaría</div><div class="d-val" id="dc_cn_notaria"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Notario</div><div class="d-val" id="dc_cn_notario"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Dirección</div><div class="d-val" id="dc_cn_dir"></div></div>
+                  <div class="data-cell"><div class="d-lbl">Referencia</div><div class="d-val" id="dc_cn_ref"></div></div>
+                </div>
+                <div class="c-spacer"></div>
+                <div class="sec-bar"><div class="sec-bar-lbl">■ Documentos que debe llevar</div><div class="sec-bar-line"></div></div>
+                <div class="docs-list" id="dc_cn_docs"></div>
+              </div>
+              <div class="c-footer"><div class="c-footer-msg">Cualquier ajuste o duda antes de la cita, avíseme con anticipación.</div><div class="c-footer-tel" id="dc_cn_tel"></div></div>
+            </div>
+            <div class="wa-block hidden" id="dc-wa-notaria"><div class="wa-lbl">● Mensaje WhatsApp</div><div class="wa-msg" id="dc-wa-notaria-txt"></div><button class="wa-copy" onclick="dcCopiarWA('dc-wa-notaria')">Copiar</button></div>
+
+          </div><!-- /preview-area -->
+        </div><!-- /docs-console -->
       </section>
 
       <!-- LINKS -->
@@ -642,6 +985,14 @@ function showPanel(id){
   const p = panels.find(x => x.id === id);
   document.getElementById('topLabel').textContent = p?.label || 'NERI';
   window.scrollTo({top:0,behavior:'smooth'});
+  if(id === 'p-docs'){
+    const ea = document.getElementById('dc_g_asesor');
+    const et = document.getElementById('dc_g_tel');
+    const ei = document.getElementById('dc_g_inmo');
+    if(ea && !ea.value) ea.value = perfil.nombre || '';
+    if(et && !et.value) et.value = perfil.telefono || '';
+    if(ei && !ei.value) ei.value = perfil.inmobiliaria || '';
+  }
 }
 
 /* ══ CRM ══ */
@@ -882,6 +1233,360 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 
 /* ══ START ══ */
 checkSession();
+
+/* ════ PANEL DE CITAS ════ */
+
+/* ── DATA ── */
+const CHECKLIST=[
+  {n:'01',t:'Limpieza general completa',s:'Pisos, vidrios, baños y cocina impecables'},
+  {n:'02',t:'Despersonalizar espacios',s:'Retirar fotos familiares y objetos personales'},
+  {n:'03',t:'Iluminación al máximo',s:'Todas las luces encendidas, cortinas abiertas'},
+  {n:'04',t:'Jardín o patio ordenado',s:'Cortar pasto, recoger objetos sueltos'},
+  {n:'05',t:'Estacionamiento despejado',s:'Sin autos al frente para tomas exteriores'},
+  {n:'06',t:'Mascotas resguardadas',s:'Para que no interfieran durante la grabación'},
+  {n:'07',t:'Aromas agradables',s:'Ventilar bien los espacios antes de la sesión'},
+  {n:'08',t:'Detalles decorativos',s:'Flores frescas, toallas dobladas, cojines acomodados'}
+];
+const PRODUCCION=[
+  {n:'01',t:'Video principal de la propiedad',s:'Recorrido completo con música y branding Método Neri'},
+  {n:'02',t:'Video podcast del asesor',s:'Presentación con contexto y puntos clave'},
+  {n:'03',t:'Videos filtro para publicidad',s:'Cortos optimizados para redes y pauta pagada'}
+];
+const AJUSTES=[
+  {t:'Mantener la estrategia actual',s:'Los resultados van en la dirección correcta'},
+  {t:'Ajustar precio de la propiedad',s:'Basado en la respuesta del mercado en este período'},
+  {t:'Cambiar segmentación del anuncio',s:'Ampliar o afinar el perfil del comprador objetivo'}
+];
+const DOCS=[
+  {n:'01',t:'Identificación oficial vigente',s:'INE / Pasaporte — original y copia'},
+  {n:'02',t:'CURP',s:'Clave Única de Registro de Población'},
+  {n:'03',t:'Comprobante de domicilio',s:'No mayor a 3 meses — original y copia'},
+  {n:'04',t:'RFC con homoclave',s:'Constancia del SAT'},
+  {n:'05',t:'Estado de cuenta bancario',s:'Últimos 3 meses para acreditar fondos'},
+  {n:'06',t:'Acta de matrimonio',s:'Si aplica — original y copia'},
+  {n:'07',t:'Poder notarial',s:'Si actúa en representación de alguien'},
+  {n:'08',t:'Cheque certificado / transferencia',s:'Según instrucciones de la notaría'}
+];
+
+/* ── INIT FORM ELEMENTS ── */
+// Producción checklist
+const pchk=document.getElementById('dc_p_check_form');
+CHECKLIST.forEach((item,i)=>{
+  const l=document.createElement('label');
+  l.className='check-item on';l.setAttribute('for','pc'+i);
+  l.innerHTML=`<input type="checkbox" id="pc${i}" checked onchange="toggleCI(this)"><span>${item.n} ${item.t}</span>`;
+  pchk.appendChild(l);
+});
+
+// Producción prod
+const pprod=document.getElementById('dc_p_prod_form');
+PRODUCCION.forEach((item,i)=>{
+  const l=document.createElement('label');
+  l.className='check-full on';l.setAttribute('for','pp'+i);
+  l.innerHTML=`<input type="checkbox" id="pp${i}" checked onchange="toggleCI(this)"><div class="check-full-text"><div class="t">${item.n} ${item.t}</div><div class="s">${item.s}</div></div>`;
+  pprod.appendChild(l);
+});
+
+// Notaría docs
+const ndocs=document.getElementById('dc_n_docs_form');
+DOCS.forEach((item,i)=>{
+  const l=document.createElement('label');
+  l.className='check-full on';l.setAttribute('for','nd'+i);
+  l.innerHTML=`<input type="checkbox" id="nd${i}" checked onchange="toggleCI(this)"><div class="check-full-text"><div class="t">${item.n} ${item.t}</div><div class="s">${item.s}</div></div>`;
+  ndocs.appendChild(l);
+});
+
+function toggleCI(cb){
+  const p=cb.closest('.check-item,.check-full');
+  cb.checked?p.classList.add('on'):p.classList.remove('on');
+}
+
+/* ── TABS ── */
+let activeTab='produccion';
+function dcSwitchTab(id,btn){
+  activeTab=id;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.form-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('dc-panel-'+id).classList.add('active');
+}
+
+/* ── LOGO HELPER ── */
+function dcLogoSVG(inmo,wrap){
+  const u=inmo.toUpperCase().trim();
+  if(u.includes('CENTURY 21')||u.includes('CENTURY21')||u.includes('C21')){
+    const sub=inmo.replace(/century\s?21/gi,'').trim().toUpperCase()||'HAUS';
+    wrap.innerHTML=`<svg viewBox="0 0 120 52" fill="none" xmlns="http://www.w3.org/2000/svg" height="48">
+      <circle cx="20" cy="20" r="17" stroke="#C6A86B" stroke-width="1.4" fill="none"/>
+      <text x="20" y="25" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="14" fill="#C6A86B" letter-spacing="1">C21</text>
+      <text x="46" y="18" font-family="'Bebas Neue',sans-serif" font-size="12" fill="#C6A86B" letter-spacing="2">CENTURY 21</text>
+      <text x="46" y="32" font-family="'Montserrat',sans-serif" font-size="9" fill="rgba(255,255,255,0.30)" letter-spacing="2">${sub}</text>
+    </svg>`;
+  } else if(inmo.trim()){
+    wrap.innerHTML=`<div style="text-align:right"><div style="font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;color:#C6A86B">${inmo.toUpperCase()}</div><div style="font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-top:2px">INMOBILIARIA</div></div>`;
+  } else {
+    wrap.innerHTML=`<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" height="40">
+      <path d="M24 6L4 22h6v20h12V30h4v12h12V22h6L24 6z" stroke="#C6A86B" stroke-width="1.2" fill="none" stroke-linejoin="round"/>
+    </svg>`;
+  }
+}
+
+function asesorData(){
+  return {
+    nombre: document.getElementById('dc_g_asesor').value||'Enrique Martínez Neri',
+    tel: document.getElementById('dc_g_tel').value||'777 985 5687',
+    inmo: document.getElementById('dc_g_inmo').value||'Century 21 Haus'
+  };
+}
+
+function dcShowCard(id){
+  document.getElementById('dc-empty-state').classList.add('hidden');
+  ['card-produccion','card-reporte','card-notaria'].forEach(c=>{
+    document.getElementById(c).classList.add('hidden');
+  });
+  ['wa-produccion','wa-reporte','wa-notaria'].forEach(w=>{
+    document.getElementById(w).classList.add('hidden');
+  });
+  document.getElementById(id).classList.remove('hidden');
+}
+
+function dcShowWA(id,msg){
+  document.getElementById(id+'-txt').textContent=msg;
+  document.getElementById(id).classList.remove('hidden');
+}
+
+/* ── GEN PRODUCCIÓN ── */
+function dcGenProduccion(){
+  const a=asesorData();
+  document.getElementById('dc_cp_nombre').textContent=a.nombre;
+  document.getElementById('dc_cp_meta').textContent=`Asesor Inmobiliario · ${a.inmo} · ${a.tel}`;
+  dcLogoSVG(a.inmo,document.getElementById('dc_cp_logo'));
+  document.getElementById('dc_cp_tel').textContent=a.tel;
+
+  const prop=document.getElementById('dc_p_prop').value||'—';
+  document.getElementById('dc_cp_prop').textContent=prop;
+  document.getElementById('dc_cp_dir').textContent=document.getElementById('dc_p_dir').value||'—';
+  const fecha=document.getElementById('dc_p_fecha').value||'—';
+  const hora=document.getElementById('dc_p_hora').value||'—';
+  document.getElementById('dc_cp_fecha').textContent=fecha;
+  document.getElementById('dc_cp_hora').textContent=hora;
+  const dur=document.getElementById('dc_p_dur').value||'—';
+  document.getElementById('dc_cp_dur').textContent=dur;
+
+  // Checklist
+  const cl=document.getElementById('dc_cp_checklist');cl.innerHTML='';
+  CHECKLIST.forEach((item,i)=>{
+    if(document.getElementById('pc'+i)?.checked){
+      cl.innerHTML+=`<div class="check-card-row"><div class="check-num">${item.n}</div><div><div class="check-t">${item.t}</div><div class="check-s">${item.s}</div></div></div>`;
+    }
+  });
+
+  // Prod
+  const pg=document.getElementById('dc_cp_prod');pg.innerHTML='';
+  PRODUCCION.forEach((item,i)=>{
+    if(document.getElementById('pp'+i)?.checked){
+      pg.innerHTML+=`<div class="prod-item"><div class="prod-num">${item.n}</div><div class="prod-t">${item.t}</div><div class="prod-s">${item.s}</div></div>`;
+    }
+  });
+
+  dcShowCard('card-produccion');
+
+  const nombre0=prop.split(' ')[0];
+  const msg=`Hola ${nombre0} 🏡\n\nLlegó el momento que estábamos esperando — mañana damos a conocer a la estrella de este proceso: *su propiedad*.\n\n📅 *Fecha:* ${fecha}\n🕐 *Hora de llegada del equipo:* ${hora}\n⏱ *Duración estimada:* ${dur}\n\nLe comparto la confirmación con todo lo que necesitamos tener listo para que su propiedad luzca en su mejor versión.\n\nCualquier ajuste, con gusto lo atendemos con anticipación.\n\n— ${a.nombre}\n📲 ${a.tel}\n*Método Neri · Sistema de Control de Calidad Inmobiliaria*`;
+  dcShowWA('wa-produccion',msg);
+
+  document.getElementById('dc_bp_print').style.display='block';
+  document.getElementById('dc_bp_wa').style.display='block';
+}
+
+/* ── GEN REPORTE ── */
+let radioSel=-1;
+function dcSelectRadio(i){
+  radioSel=i;
+  document.querySelectorAll('.radio-item').forEach((el,j)=>{
+    el.classList.toggle('on',j===i);
+  });
+}
+
+function dcGenReporte(){
+  const a=asesorData();
+  document.getElementById('dc_cr_nombre').textContent=a.nombre;
+  document.getElementById('dc_cr_meta').textContent=`Asesor Inmobiliario · ${a.inmo} · ${a.tel}`;
+  dcLogoSVG(a.inmo,document.getElementById('dc_cr_logo'));
+  document.getElementById('dc_cr_tel').textContent=a.tel;
+
+  const prop=document.getElementById('dc_r_prop').value||'—';
+  const semana=document.getElementById('dc_r_semana').value||'—';
+  document.getElementById('dc_cr_prop').textContent=prop;
+  document.getElementById('dc_cr_dir').textContent=document.getElementById('dc_r_dir').value||'—';
+  document.getElementById('dc_cr_semana').textContent=semana;
+
+  // Headline semana
+  document.getElementById('cr_semana_h').textContent='PERÍODO: '+semana.toUpperCase()+'.';
+
+  const ids=['alcance','repro','clics','leads','lcal','visitas','presupuesto','cpl'];
+  ids.forEach(k=>{
+    const v=document.getElementById('r_'+k).value||'—';
+    const prefix=(k==='presupuesto'||k==='cpl')&&v!=='—'?'$':'';
+    document.getElementById('cr_'+k).textContent=prefix+v;
+  });
+
+  document.getElementById('dc_cr_comentarios').textContent=document.getElementById('dc_r_comentarios').value||'Sin comentarios registrados.';
+  document.getElementById('dc_cr_obs').textContent=document.getElementById('dc_r_obs').value||'Sin observaciones.';
+
+  // Ajuste
+  const ag=document.getElementById('dc_cr_ajuste');ag.innerHTML='';
+  AJUSTES.forEach((item,i)=>{
+    const sel=i===radioSel;
+    ag.innerHTML+=`<div class="ajuste-row">
+      <div class="ajuste-num">0${i+1}</div>
+      <div class="ajuste-dot ${sel?'on':''}"></div>
+      <div><div class="ajuste-t">${item.t}</div><div class="ajuste-s">${item.s}</div></div>
+    </div>`;
+  });
+
+  dcShowCard('card-reporte');
+
+  const ajusteTexto=radioSel>=0?AJUSTES[radioSel].t:'Pendiente de definir';
+  const alcance=document.getElementById('dc_r_alcance').value||'—';
+  const leads=document.getElementById('dc_r_leads').value||'—';
+  const lcal=document.getElementById('dc_r_lcal').value||'—';
+  const nombre0=prop.split(' ')[0];
+  const msg=`Hola ${nombre0},\n\nAquí está el reporte de resultados de su propiedad en publicidad.\n\n📊 *Resultados del período ${semana}:*\n• Alcance: ${alcance} personas\n• Leads recibidos: ${leads}\n• Leads calificados: ${lcal}\n\n📌 *Decisión estratégica para el siguiente período:*\n${ajusteTexto}\n\nCualquier pregunta sobre los datos, con gusto la revisamos.\n\n— ${a.nombre}\n📲 ${a.tel}\n*Método Neri · Transparencia total en cada etapa*`;
+  dcShowWA('wa-reporte',msg);
+
+  document.getElementById('dc_br_print').style.display='block';
+  document.getElementById('dc_br_wa').style.display='block';
+}
+
+/* ── GEN NOTARÍA ── */
+function dcGenNotaria(){
+  const a=asesorData();
+  document.getElementById('dc_cn_nombre').textContent=a.nombre;
+  document.getElementById('dc_cn_meta').textContent=`Asesor Inmobiliario · ${a.inmo} · ${a.tel}`;
+  dcLogoSVG(a.inmo,document.getElementById('dc_cn_logo'));
+  document.getElementById('dc_cn_tel').textContent=a.tel;
+
+  const cliente=document.getElementById('dc_n_cliente').value||'—';
+  const fecha=document.getElementById('dc_n_fecha').value||'—';
+  const hora=document.getElementById('dc_n_hora').value||'—';
+  document.getElementById('dc_cn_cliente').textContent=cliente;
+  document.getElementById('dc_cn_fecha').textContent=fecha;
+  document.getElementById('dc_cn_hora').textContent=hora;
+  document.getElementById('dc_cn_notaria').textContent=document.getElementById('dc_n_notaria').value||'—';
+  document.getElementById('dc_cn_notario').textContent=document.getElementById('dc_n_notario').value||'—';
+  document.getElementById('dc_cn_dir').textContent=document.getElementById('dc_n_dir').value||'—';
+  document.getElementById('dc_cn_ref').textContent=document.getElementById('dc_n_ref').value||'—';
+
+  // Docs
+  const dl=document.getElementById('dc_cn_docs');dl.innerHTML='';
+  DOCS.forEach((item,i)=>{
+    if(document.getElementById('nd'+i)?.checked){
+      dl.innerHTML+=`<div class="doc-row"><div class="doc-num">${item.n}</div><div><div class="doc-t">${item.t}</div><div class="doc-s">${item.s}</div></div></div>`;
+    }
+  });
+
+  dcShowCard('card-notaria');
+
+  const nombre0=cliente.split(' ')[0];
+  const notaria=document.getElementById('dc_n_notaria').value||'la notaría';
+  const dir=document.getElementById('dc_n_dir').value||'';
+  const msg=`Hola ${nombre0},\n\nTodo está listo para su cita en notaría. Le confirmo los datos:\n\n📅 *Fecha:* ${fecha}\n🕐 *Hora:* ${hora}\n🏛 *Notaría:* ${notaria}\n📍 *Dirección:* ${dir}\n\nLe recomiendo llegar 10 minutos antes. En la tarjeta adjunta encontrará la lista completa de documentos que debe llevar.\n\nCualquier ajuste, con gusto lo coordino con anticipación.\n\n— ${a.nombre}\n📲 ${a.tel}\n*Método Neri · Sistema de Control de Calidad Inmobiliaria*`;
+  dcShowWA('wa-notaria',msg);
+
+  document.getElementById('dc_bn_print').style.display='block';
+  document.getElementById('dc_bn_wa').style.display='block';
+}
+
+/* ── IMPRIMIR ── */
+const PRINT_CSS=`
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@1,400&family=Montserrat:wght@300;400;500;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0A0A0A;display:flex;justify-content:center;padding:0;}
+:root{--black:#0A0A0A;--black-2:#111111;--black-3:#181818;--gold:#C6A86B;--gold-light:#E2C98A;--gold-dim:rgba(198,168,107,0.10);--gold-border:rgba(198,168,107,0.22);--gold-strong:rgba(198,168,107,0.45);--w100:rgba(255,255,255,1);--w60:rgba(255,255,255,0.60);--w35:rgba(255,255,255,0.35);--w18:rgba(255,255,255,0.18);--w8:rgba(255,255,255,0.08);--w4:rgba(255,255,255,0.04);}
+.card{width:700px;background:var(--black);border-top:1px solid var(--gold-border);border-bottom:1px solid var(--gold-border);font-family:'Montserrat',sans-serif;}
+.c-header{background:var(--black-2);border-bottom:1px solid var(--gold-border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;}
+.c-asesor-name{font-family:'Bebas Neue',sans-serif;font-size:19px;letter-spacing:2px;color:var(--w100);}
+.c-asesor-meta{font-size:9px;color:var(--w35);margin-top:3px;}
+.c-logo{display:flex;align-items:center;justify-content:flex-end;}
+.c-hero{padding:28px 32px 24px;border-bottom:1px solid var(--w4);}
+.c-hero-tag{font-size:8px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.c-hero-h{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:2px;color:var(--w100);line-height:1;}
+.c-hero-sub{font-family:'Cormorant Garamond','Georgia',serif;font-style:italic;font-size:14px;color:var(--w35);margin-top:6px;line-height:1.5;}
+.c-body{padding:0 32px;}
+.c-spacer{height:20px;}
+.sec-bar{display:flex;align-items:center;}
+.sec-bar-lbl{background:var(--gold);color:var(--black);font-size:8px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:6px 14px;flex-shrink:0;}
+.sec-bar-line{flex:1;height:1px;background:var(--gold-border);}
+.data-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--w8);border-top:none;}
+.data-cell{padding:12px 18px;border-right:1px solid var(--w4);border-bottom:1px solid var(--w4);}
+.data-cell:nth-child(even){border-right:none;}
+.data-cell.full{grid-column:1/-1;}
+.d-lbl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--w18);margin-bottom:3px;}
+.d-val{font-size:12px;font-weight:500;color:var(--w100);}
+.d-val.gold{color:var(--gold);font-size:13px;font-weight:600;}
+.d-val.big{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--gold);letter-spacing:1px;line-height:1;}
+.check-card-grid{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--w8);border-top:none;}
+.check-card-row{display:flex;align-items:flex-start;gap:10px;padding:10px 16px;border-bottom:1px solid var(--w4);border-right:1px solid var(--w4);}
+.check-card-row:nth-child(even){border-right:none;}
+.check-num{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);flex-shrink:0;margin-top:1px;}
+.check-t{font-size:10px;font-weight:600;color:var(--w100);line-height:1.3;}
+.check-s{font-size:9px;font-weight:300;color:var(--w35);margin-top:1px;line-height:1.3;}
+.prod-grid{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--w8);border-top:none;}
+.prod-item{padding:12px 16px;border-right:1px solid var(--w4);}
+.prod-item:last-child{border-right:none;}
+.prod-num{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold);line-height:1;}
+.prod-t{font-size:10px;font-weight:600;color:var(--w100);margin-top:3px;line-height:1.3;}
+.prod-s{font-size:9px;font-weight:300;color:var(--w35);margin-top:1px;line-height:1.3;}
+.ajuste-grid{display:grid;grid-template-columns:1fr;border:1px solid var(--w8);border-top:none;}
+.ajuste-row{display:flex;align-items:flex-start;gap:12px;padding:12px 18px;border-bottom:1px solid var(--w4);}
+.ajuste-row:last-child{border-bottom:none;}
+.ajuste-num{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);flex-shrink:0;}
+.ajuste-dot{width:14px;height:14px;border:1.5px solid rgba(198,168,107,0.22);border-radius:50%;flex-shrink:0;margin-top:2px;}
+.ajuste-dot.on{background:#C6A86B;border-color:#C6A86B;}
+.ajuste-t{font-size:11px;font-weight:600;color:var(--w100);line-height:1.3;}
+.ajuste-s{font-size:9px;font-weight:300;color:var(--w35);margin-top:2px;line-height:1.3;}
+.docs-list{border:1px solid var(--w8);border-top:none;}
+.doc-row{display:flex;align-items:flex-start;gap:14px;padding:11px 18px;border-bottom:1px solid var(--w4);}
+.doc-row:last-child{border-bottom:none;}
+.doc-num{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--gold);flex-shrink:0;margin-top:1px;}
+.doc-t{font-size:11px;font-weight:600;color:var(--w100);line-height:1.3;}
+.doc-s{font-size:9px;font-weight:300;color:var(--w35);margin-top:1px;}
+.analysis-block{border:1px solid var(--w8);border-top:none;}
+.analysis-cell{padding:14px 18px;border-bottom:1px solid var(--w4);}
+.analysis-cell:last-child{border-bottom:none;}
+.analysis-lbl{font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;color:var(--w18);margin-bottom:6px;}
+.analysis-txt{font-size:11px;font-weight:400;color:var(--w60);line-height:1.6;white-space:pre-wrap;}
+.c-footer{margin:20px 32px 0;border-top:1px solid var(--gold-border);padding:14px 0 22px;display:flex;align-items:center;justify-content:space-between;}
+.c-footer-msg{font-size:9px;font-style:italic;color:var(--w35);}
+.c-footer-tel{font-size:10px;font-weight:600;color:var(--gold);letter-spacing:1px;}
+#hint{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#C6A86B;color:#0A0A0A;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:3px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.5);}
+@media print{@page{margin:0;size:700px auto;}body{background:#0A0A0A!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}#hint{display:none!important;}}
+`;
+
+function dcImprimirTarjeta(id){
+  const card=document.getElementById(id);
+  if(!card||card.classList.contains('hidden'))return;
+  const win=window.open('','_blank','width=760,height:900,scrollbars=yes');
+  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>${PRINT_CSS}</style></head><body><div class="card">${card.innerHTML}</div><div id="hint" onclick="window.print()">● Guardar / Imprimir</div></body></html>`);
+  win.document.close();
+  win.onload=()=>setTimeout(()=>win.print(),1200);
+}
+
+/* ── COPIAR WA ── */
+function dcCopiarWA(id){
+  const txt=document.getElementById(id+'-txt');
+  if(!txt||!txt.textContent)return;
+  navigator.clipboard.writeText(txt.textContent).then(()=>{
+    const btn=document.querySelector(`#${id} .wa-copy`);
+    if(!btn)return;
+    const orig=btn.textContent;
+    btn.textContent='✓ Copiado';
+    setTimeout(()=>btn.textContent=orig,2000);
+  });
+}
+
+
 </script>
 </body>
 </html>
